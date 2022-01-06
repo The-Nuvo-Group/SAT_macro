@@ -33,22 +33,45 @@ Function findPropertyName(startSearch As String, endSearch As String, targetCol 
 
 End Function
 
+Function FreezePanelTarget(startSearch As String, endSearch As String, LimitColumn As String) As String
+
+    'Declair var Address, offSet'
+    Dim Address As String
+    Dim FPTargetAddress As String
+    
+    'Get Address of Limiting Column'
+    Address = findPropertyName(startSearch, endSearch, LimitColumn)
+    
+    'Calculate Freeze Panel Address'
+    FPTargetAddress = Range(Address).Offset(1, 1).Address(False, False)
+      
+    'Return Statement'
+    FreezePanelTarget = FPTargetAddress
+
+End Function
+
 Sub test()
     'Activate Worksheet'
     Dim ws As Worksheet
     Set ws = Worksheets(2)
     ws.Activate
-
-    'Declair var Address'
-    Dim Address As String
     
-    'Call Function'
-    Address = findPropertyName("A1", "H7", "Property Name")
+    Dim results As String
+    results = FreezePanelTarget("A1", "H7", "Property Name")
+       
+    'Deactivate Freez Panes if ANY'
+    ActiveWindow.FreezePanes = False
+     
+    Range(results).Interior.Color = RGB(255, 0, 0) 'TO BE REMOVE, FOR TESTING'
     
-    Debug.Print Address
+    'Freez  Selected Column'
+    Range(results).Select
     
-    Range(Address).Interior.Color = RGB(255, 215, 0)
+    'Activate Freez Panes if ANY'
+    ActiveWindow.FreezePanes = True
     
 End Sub
   
     
+
+
