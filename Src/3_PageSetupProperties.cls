@@ -7,6 +7,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = True
+
+
 Sub pageSetup(ws As Worksheet)
     
     ' -- Orientation -- '
@@ -29,11 +31,13 @@ Sub marginSetup(ws As Worksheet)
     Dim topBottom As Double
     Dim leftRight As Double
     Dim headerFooter As Double
-        
+       
+	' -- Margins values in inches --'
     topBottom = 0.5
     leftRight = 2.5
     headerFooter = 0.3
     
+	' -- Set Margins -- '
     ws.pageSetup.TopMargin = Application.InchesToPoints(topBottom)
     ws.pageSetup.BottomMargin = Application.InchesToPoints(topBottom)
     
@@ -49,27 +53,30 @@ End Sub
 
 Sub headerfooterSetup(ws As Worksheet)
 
-' -- Diff odd/even pages -- '
-ws.pageSetup.OddAndEvenPagesHeaderFooter = False
+	' -- Set Header and Footer options --  '
+	
+	' -- Diff odd/even pages -- '
+	ws.pageSetup.OddAndEvenPagesHeaderFooter = False
 
-' -- Diff 1st page -- '
-ws.pageSetup.DifferentFirstPageHeaderFooter = False
+	' -- Diff 1st page -- '
+	ws.pageSetup.DifferentFirstPageHeaderFooter = False
 
-' -- Scale with Doc -- '
-ws.pageSetup.ScaleWithDocHeaderFooter = False
+	' -- Scale with Doc -- '
+	ws.pageSetup.ScaleWithDocHeaderFooter = False
 
-' -- Margin Aligment -- '
-ws.pageSetup.AlignMarginsHeaderFooter = True
+	' -- Margin Aligment -- '
+	ws.pageSetup.AlignMarginsHeaderFooter = True
 
 End Sub
 
 
 Sub fileSetup()
-    
+	' -- Worksheet object -- '
     Dim ws As Worksheet
     Set ws = Worksheets(2)
     ws.Activate
     
+	' -- Call sub-procedures -- '
     Call pageSetup(ws)
     Call marginSetup(ws)
     Call headerfooterSetup(ws)
