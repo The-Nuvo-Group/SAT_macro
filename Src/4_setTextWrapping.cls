@@ -17,6 +17,7 @@ Function lastCl(ws As Worksheet) As String
 
     ' Get Last Column Number with Data '
     colNumber = Cells(3, Columns.Count).End(xlToLeft).Column
+    
     ' Return the Character encoding, Column Name, of he column'
     lastCl = Split(Cells(, colNumber).Address, "$")(1)
 
@@ -28,8 +29,22 @@ Sub t()
     Set ws = Worksheets(2)
     ws.Activate
     
-    Debug.Print lastRw(ws)
-    Debug.Print lastCl(ws)
+    Dim Rng As Range
+    Dim strRng As String
+    
+    
+    ' -- FOR TESTING | DELETE LATER -- '
+    strRng = lastCl(ws) + CStr(lastRw(ws))
+    Debug.Print strRng
+    
+	' -- THIS RANGE IS THE ANNEX DATA -- '
+    For Each Column In Range("A1", strRng).Columns
+        For Each Cell In Column.Cells
+			' -- FILL CELL WITH COLOR -- '
+            Cell.Interior.Color = RGB(3, 202, 252)
+        Next
+    Next
+    
 
 End Sub
 
