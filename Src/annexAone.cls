@@ -8,35 +8,20 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 'Holds Annex A-1 Configuration
-Public annexA As Object
+Public annexA As New Dictionary
 
 'Get Page Confiugration
-Public Sub assembleAnnexA1(nameHasht As String, keys As Collection, values As Collection)
+Public Sub assembleAnnexA1(configPath As String)
 
-    Dim configItems As Object
-    Set configItems = CreateObject("Scripting.Dictionary")
+    Dim FSO As New FileSystemObject
+    Dim textstrm As TextStream
+    Dim config As Dictionary
     
-    If Not (keys.Count = values.Count) Then
-        Debug.Print "Key and Values do not match in length"
-        
-        'Warning and Exit
-        Call MsgBox("In assembleAnnexA1Config; Keys and Values diff lenght.", vbQuestion + vbMsgBoxRight, "Parameter Error")
-        Exit Sub
-    End If
+    Set textstrm = FSO.OpenTextFile(configPath, ForReading)
     
-    For idx = 1 To keys.Count
-        If Not configItems.Exists(keys(idx)) Then
-            configItems.Add keys(idx), values(idx)
-        End If
-    Next
-        
-    'Add to AnnexA1
-    If Not annexA.Exists(nameHasht) Then
-        annexA.Add nameHasht, configItems
-    End If
+    Set annexA = JsonConverter.ParseJson(textstrm.ReadAll)
     
-    'Clear/Free Memory
-    Set configItems = Nothing
+    textstrm.Close
 
 End Sub
 
@@ -51,7 +36,7 @@ Public Sub printHashT()
     For Each k In annexA.keys
         Debug.Print k
         For Each subK In annexA(k).keys
-            Debug.Print subK, annexA(k)(subK)
+            Debug.Print "  ", subK, "  ", annexA(k)(subK)
         Next
     Next
     
@@ -59,7 +44,7 @@ End Sub
 
 
 Private Sub Class_Initialize()
-    Set annexA = CreateObject("Scripting.Dictionary")
+    'Set annexA = CreateObject("Scripting.Dictionary")
     
 End Sub
 
