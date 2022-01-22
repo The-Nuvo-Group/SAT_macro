@@ -1,0 +1,22 @@
+{
+	"pagesetup":{
+		"orientation": 1,
+		"scaling": 40,
+		"size":"letter",
+		"printquality":600
+	},
+	"marginsetup":{
+		"top": 1,
+		"bottom": 40,
+		"left":"letter",
+		"right":600
+	},
+	"headerfootersetup":{
+		"header": 0.3,
+		"footer": 0.3,
+		"settings":{
+			"aling":"left",
+			"scale":"false"
+		}
+	}
+}
