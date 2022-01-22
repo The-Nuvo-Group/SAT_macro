@@ -8,7 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 'Holds Annex A-1 Configuration
-Public annexA As New Dictionary
+Private annexA As New Dictionary
 
 'Get Page Confiugration
 Public Sub assembleAnnexA1(configPath As String)
@@ -31,16 +31,29 @@ Public Property Get getCount() As Integer
     
 End Property
 
-Public Sub printHashT()
+Public Sub printSepcs()
+    printHashT annexA
 
-    For Each k In annexA.keys
-        Debug.Print k
-        For Each subK In annexA(k).keys
-            Debug.Print "  ", subK, "  ", annexA(k)(subK)
-        Next
-    Next
-    
 End Sub
+
+'Traverses a HashTable in a recursive way
+Private Sub printHashT(dict As Dictionary, Optional ByVal level = 0)
+    Dim indent As String
+    indent = Space(level)
+    
+    For Each k In dict.Keys
+        If VarType(dict(k)) = 9 Then ' vbObject == 9
+            Debug.Print indent; k; ":  "
+            level = level + 1
+            printHashT dict(k), level
+            level = level - 1
+        Else
+            Debug.Print indent; "-"; k; ": "; dict(k)
+        End If
+    Next
+        
+End Sub
+
 
 
 Private Sub Class_Initialize()
