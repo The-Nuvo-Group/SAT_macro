@@ -4,7 +4,8 @@ Sub Main()
     
     Annex.assembleAnnexA1 "C:\Users\jairo\Desktop\Me\ExcelMacro\LiveRepo\Excel-Tools\Src\Config\annexa1Config.json"
     
-    Annex.printHashT
+    Annex.printSepcs
+    
    
 End Sub
 
