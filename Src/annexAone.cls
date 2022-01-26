@@ -10,8 +10,8 @@ Attribute VB_Exposed = False
 'Holds Annex A-1 Configuration
 Private annexA As New Dictionary
 
-'Get Page Confiugration
-Public Sub assembleAnnexA1(configPath As String)
+'Get Page Configuration
+Public Sub readConfig(configPath As String)
 
     Dim FSO As New FileSystemObject
     Dim textstrm As TextStream
@@ -31,7 +31,76 @@ Public Property Get getCount() As Integer
     
 End Property
 
-Public Sub printSepcs()
+Public Sub setupAnnexPages(ws As Worksheet)
+
+    Debug.Print "WORKING MODE START"
+    Call sectionPageSetup(ws, annexA("pagesetup"))
+    Call sectionMarginsSetup(ws, annexA("marginsetup"))
+    Call sectionHeaderFooterSetup(ws, annexA("headerfootersetup"))
+    Debug.Print "WORKING MODE END"
+    
+
+End Sub
+
+Private Sub sectionPageSetup(ws As Worksheet, config As Dictionary)
+    
+    Debug.Print "  SETTING UP PAGE"
+    
+    ' -- Orientation -- '
+    ws.pageSetup.Orientation = config("orientation")
+    
+    ' -- Paper Size -- '
+    ws.pageSetup.PaperSize = config("size")
+    
+    ' -- Scaling -- '
+    ws.pageSetup.Zoom = config("scaling")
+    
+    ' -- Print Quiality -- '
+    ws.pageSetup.PrintQuality = config("quality")
+    
+End Sub
+
+Private Sub sectionMarginsSetup(ws As Worksheet, config As Dictionary)
+    
+    Debug.Print "  SETTING UP MARING"
+    
+    ' -- Set Margins -- '
+    ws.pageSetup.TopMargin = Application.InchesToPoints(config("top"))
+    ws.pageSetup.BottomMargin = Application.InchesToPoints(config("bottom"))
+    
+    ws.pageSetup.LeftMargin = Application.InchesToPoints(config("left"))
+    ws.pageSetup.RightMargin = Application.InchesToPoints(config("right"))
+    
+    ws.pageSetup.HeaderMargin = Application.InchesToPoints(config("top"))
+    ws.pageSetup.FooterMargin = Application.InchesToPoints(config("top"))
+    
+End Sub
+
+Private Sub sectionHeaderFooterSetup(ws As Worksheet, config As Dictionary)
+    
+    Debug.Print "  SETTING UP HEADER/FOOTER"
+    ' -- Set Margins -- '
+    ws.pageSetup.HeaderMargin = Application.InchesToPoints(config("header"))
+    ws.pageSetup.FooterMargin = Application.InchesToPoints(config("footer"))
+    
+    ' -- Diff odd/even pages -- '
+    ws.pageSetup.OddAndEvenPagesHeaderFooter = config("settings")("OddEvenPage")
+
+    ' -- Diff 1st page -- '
+    ws.pageSetup.DifferentFirstPageHeaderFooter = config("settings")("DiffFirstPG")
+
+    ' -- Scale with Doc -- '
+    ws.pageSetup.ScaleWithDocHeaderFooter = config("settings")("scale")
+
+    ' -- Margin Aligment -- '
+    ws.pageSetup.AlignMarginsHeaderFooter = config("settings")("aling")
+
+End Sub
+
+
+
+
+Public Sub printConfig()
     printHashT annexA
 
 End Sub
@@ -41,7 +110,7 @@ Private Sub printHashT(dict As Dictionary, Optional ByVal level = 0)
     Dim indent As String
     indent = Space(level)
     
-    For Each k In dict.Keys
+    For Each k In dict.keys
         If VarType(dict(k)) = 9 Then ' vbObject == 9
             Debug.Print indent; k; ":  "
             level = level + 1
