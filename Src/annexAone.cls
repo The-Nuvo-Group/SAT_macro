@@ -37,6 +37,7 @@ Public Sub setupAnnexPages(ws As Worksheet)
     Call sectionPageSetup(ws, annexA("pagesetup"))
     Call sectionMarginsSetup(ws, annexA("marginsetup"))
     Call sectionHeaderFooterSetup(ws, annexA("headerfootersetup"))
+    Call sectionRepeatRowColSetup(ws)
     Debug.Print "WORKING MODE END"
     
 
@@ -47,32 +48,32 @@ Private Sub sectionPageSetup(ws As Worksheet, config As Dictionary)
     Debug.Print "  SETTING UP PAGE"
     
     ' -- Orientation -- '
-    ws.pageSetup.Orientation = config("orientation")
+    ws.PageSetup.Orientation = config("orientation")
     
     ' -- Paper Size -- '
-    ws.pageSetup.PaperSize = config("size")
+    ws.PageSetup.PaperSize = config("size")
     
     ' -- Scaling -- '
-    ws.pageSetup.Zoom = config("scaling")
+    ws.PageSetup.Zoom = config("scaling")
     
     ' -- Print Quiality -- '
-    ws.pageSetup.PrintQuality = config("quality")
+    ws.PageSetup.PrintQuality = config("quality")
     
 End Sub
 
 Private Sub sectionMarginsSetup(ws As Worksheet, config As Dictionary)
     
-    Debug.Print "  SETTING UP MARING"
+    Debug.Print "  SETTING UP MARGIN"
     
     ' -- Set Margins -- '
-    ws.pageSetup.TopMargin = Application.InchesToPoints(config("top"))
-    ws.pageSetup.BottomMargin = Application.InchesToPoints(config("bottom"))
+    ws.PageSetup.TopMargin = Application.InchesToPoints(config("top"))
+    ws.PageSetup.BottomMargin = Application.InchesToPoints(config("bottom"))
     
-    ws.pageSetup.LeftMargin = Application.InchesToPoints(config("left"))
-    ws.pageSetup.RightMargin = Application.InchesToPoints(config("right"))
+    ws.PageSetup.LeftMargin = Application.InchesToPoints(config("left"))
+    ws.PageSetup.RightMargin = Application.InchesToPoints(config("right"))
     
-    ws.pageSetup.HeaderMargin = Application.InchesToPoints(config("top"))
-    ws.pageSetup.FooterMargin = Application.InchesToPoints(config("top"))
+    ws.PageSetup.HeaderMargin = Application.InchesToPoints(config("top"))
+    ws.PageSetup.FooterMargin = Application.InchesToPoints(config("top"))
     
 End Sub
 
@@ -80,24 +81,48 @@ Private Sub sectionHeaderFooterSetup(ws As Worksheet, config As Dictionary)
     
     Debug.Print "  SETTING UP HEADER/FOOTER"
     ' -- Set Margins -- '
-    ws.pageSetup.HeaderMargin = Application.InchesToPoints(config("header"))
-    ws.pageSetup.FooterMargin = Application.InchesToPoints(config("footer"))
+    ws.PageSetup.HeaderMargin = Application.InchesToPoints(config("header"))
+    ws.PageSetup.FooterMargin = Application.InchesToPoints(config("footer"))
     
     ' -- Diff odd/even pages -- '
-    ws.pageSetup.OddAndEvenPagesHeaderFooter = config("settings")("OddEvenPage")
+    ws.PageSetup.OddAndEvenPagesHeaderFooter = config("settings")("OddEvenPage")
 
     ' -- Diff 1st page -- '
-    ws.pageSetup.DifferentFirstPageHeaderFooter = config("settings")("DiffFirstPG")
+    ws.PageSetup.DifferentFirstPageHeaderFooter = config("settings")("DiffFirstPG")
 
     ' -- Scale with Doc -- '
-    ws.pageSetup.ScaleWithDocHeaderFooter = config("settings")("scale")
+    ws.PageSetup.ScaleWithDocHeaderFooter = config("settings")("scale")
 
     ' -- Margin Aligment -- '
-    ws.pageSetup.AlignMarginsHeaderFooter = config("settings")("aling")
+    ws.PageSetup.AlignMarginsHeaderFooter = config("settings")("aling")
 
 End Sub
 
+Private Sub sectionRepeatRowColSetup(ws)
+    
+    Debug.Print "  SETTING UP ROW/COLUMN REPEAT"
+    
+    'Check if Panes are frozen
+    If ActiveWindow.FreezePanes = False Then
+        Dim results As String
+        results = FreezePanelTarget("A1", "H7", "Property Name")
+        
+        'Freez  Selected Column'
+        Range(results).Select
+        
+        'Activate Freez Panes if ANY'
+        ActiveWindow.FreezePanes = True
+    End If
+        
+    'Split Intersectioin into Row and Colum'
+    Dim dict As Object
+    Set dict = splitAddress(Cells(ActiveWindow.SplitRow, ActiveWindow.SplitColumn).address)
+    
+    'Set Repeating Rows and Columns'
+    ws.PageSetup.PrintTitleRows = GenerateColRowTitleRange(dict.item("Row"), "Row")
+    ws.PageSetup.PrintTitleColumns = GenerateColRowTitleRange(dict.item("Col"), "Col")
 
+End Sub
 
 
 Public Sub printConfig()
