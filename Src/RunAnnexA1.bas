@@ -12,6 +12,8 @@ Sub Main()
     
     Annex.setupAnnexPages ws
     
+    Annex.setupPrintArea ws
+    
    
 End Sub
 
