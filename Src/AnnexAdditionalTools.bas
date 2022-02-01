@@ -74,3 +74,19 @@ Function GenerateColRowTitleRange(target As String, item As String) As String
     GenerateColRowTitleRange = itemRange
 
 End Function
+
+Function lastCl(ws As Worksheet) As String
+
+    ' Get Last Column Number with Data '
+    colNumber = Cells(3, Columns.Count).End(xlToLeft).Column
+    
+    ' Return the Character encoding, Column Name, of he column'
+    lastCl = Split(Cells(, colNumber).address, "$")(1)
+
+End Function
+
+Function lastRw(ws As Worksheet) As Long
+    ' Get last Row with data '
+    lastRw = Cells(Rows.Count, 1).End(xlUp).Row
+    
+End Function

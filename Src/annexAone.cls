@@ -118,9 +118,42 @@ Private Sub sectionRepeatRowColSetup(ws)
     Dim dict As Object
     Set dict = splitAddress(Cells(ActiveWindow.SplitRow, ActiveWindow.SplitColumn).address)
     
+    'Store info about repeating rows and cols into annexA
+    annexA.Add "repeating", dict
+    
     'Set Repeating Rows and Columns'
     ws.PageSetup.PrintTitleRows = GenerateColRowTitleRange(dict.item("Row"), "Row")
     ws.PageSetup.PrintTitleColumns = GenerateColRowTitleRange(dict.item("Col"), "Col")
+
+End Sub
+
+Public Sub setupPrintArea(ws As Worksheet)
+
+    'AutoFit all columns and rows in Annex A
+    Columns(GenerateColRowTitleRange(lastCl(ws), "Col")).AutoFit
+    Rows(GenerateColRowTitleRange(CStr(lastRw(ws)), "Row")).AutoFit
+    
+    findWdith ws, "A", annexA("repeating").item("Col")
+    
+
+End Sub
+
+Private Sub findWdith(ws, start, limit)
+    
+    Dim c As Range
+    Dim str As String
+    Dim T As Double
+    T = 0
+    
+    str = start + ":" + limit
+    Debug.Print str
+        
+    For Each c In Range(str).Columns
+        T = T + c.ColumnWidth
+        'Debug.Print c.ColumnWidth
+    Next
+    Debug.Print T
+
 
 End Sub
 
