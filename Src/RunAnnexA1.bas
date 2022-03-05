@@ -8,13 +8,12 @@ Sub Main()
         
     Annex.readConfig "C:\Users\jairo\Desktop\Me\ExcelMacro\LiveRepo\Excel-Tools\Src\Config\annexa1Config.json"
     
-    Annex.printConfig
-    
     Annex.setupAnnexPages ws
     
     Annex.setupPrintArea ws
     
-   
+    Annex.printConfig
+    
 End Sub
 
 
