@@ -90,3 +90,22 @@ Function lastRw(ws As Worksheet) As Long
     lastRw = Cells(Rows.Count, 1).End(xlUp).Row
     
 End Function
+
+'Function returns the idx location of a White Space in a String
+Function idxsWhiteSpaces(text As String) As Collection
+    Dim idxs As New Collection
+    Dim idx As Integer
+    idx = 0
+    Do While True
+        idx = InStr(idx + 1, text, " ", vbBinaryCompare)
+        If idx = 0 Then
+            Exit Do
+        End If
+        idxs.Add idx
+    Loop
+    
+    'Return
+    Set idxsWhiteSpaces = idxs
+End Function
+
+
