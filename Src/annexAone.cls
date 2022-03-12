@@ -133,24 +133,27 @@ Public Sub setupPrintArea(ws As Worksheet)
     Columns(GenerateColRowTitleRange(lastCl(ws), "Col")).AutoFit
     Rows(GenerateColRowTitleRange(CStr(lastRw(ws)), "Row")).AutoFit
     
-    findWdith ws, "A", annexA("repeating").item("Col")
+    findWidth ws, "A", annexA("repeating").item("Col")
     
 
 End Sub
 
-Private Sub findWdith(ws, start, limit)
+Private Sub findWidth(ws, start, limit)
     
     Dim c As Range
     Dim str As String
     Dim T As Double
     T = 0
     
+    Debug.Print start
+    Debug.Print limit
+    
     str = start + ":" + limit
     Debug.Print str
         
     For Each c In Range(str).Columns
         T = T + c.ColumnWidth
-        'Debug.Print c.ColumnWidth
+        Debug.Print c.address; "-> "; printgetLabelPixel; CStr(c.ColumnWidth); "     T ->: "; T
     Next
     Debug.Print T
 
