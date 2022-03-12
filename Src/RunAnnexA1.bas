@@ -20,37 +20,15 @@ Sub Main()
     Debug.Print "****"
     Debug.Print "****"
     
-    Dim charsLen, pxlen, cellLen As New Collection
+    Debug.Print " ------ "
+    Debug.Print arrangeHeader(Range("A1").text)
+    Debug.Print " ------ "
+    Debug.Print arrangeHeader(Range("B1").text)
+    Debug.Print " ------ "
+    Debug.Print arrangeHeader(Range("C1").text)
+    Debug.Print " ------ "
     
-    'For Each c In Range("A1:A145")
-        'Debug.Print c.address; " - ("; Len(c.text); " - "; Len(c.Value); ") - ("; Px.getLabelPixel(c.text); " - "; Px.getLabelPixel(c.Value); ") - "; c.Width '; " - "; c.text
-    'Next
-    Dim targetCell As Range
-    Dim cellA1 As String
-    Dim idWSpace As New Collection
     
-    Set targetCell = Range("A1")
-    cellA1 = targetCell.text
-    Set idWSpace = idxsWhiteSpaces(cellA1)
-    
-    Debug.Print cellA1
-    Debug.Print "Numer of WhiteSpaces: "; idWSpace.Count
-    
-    l = Mid(cellA1, 1, idWSpace(2))
-    r = Mid(cellA1, idWSpace(2), Len(cellA1))
-    h = l & Chr(10) & r
-
-    Debug.Print targetCell.address; " - ("; Len(cellA1); " - "; Len(targetCell.Value); ") - ("; Px.getLabelPixel(cellA1); " - "; Px.getLabelPixel(targetCell.Value); ") - "; targetCell.Width; " - "; cellA1
-    Debug.Print Len(cellA1)
-    Debug.Print Len(l)
-    Debug.Print Len(r)
-    Debug.Print Len(h)
-    
-    targetCell.Value = h
-    
-    Debug.Print targetCell.address; " - ("; Len(cellA1); " - "; Len(targetCell.Value); ") - ("; Px.getLabelPixel(cellA1); " - "; Px.getLabelPixel(targetCell.Value); ") - "; targetCell.Width; " - "; cellA1
-        
-        
         
 End Sub
 
