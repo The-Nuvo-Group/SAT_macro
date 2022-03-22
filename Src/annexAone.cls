@@ -133,31 +133,42 @@ Public Sub setupPrintArea(ws As Worksheet)
     Columns(GenerateColRowTitleRange(lastCl(ws), "Col")).AutoFit
     Rows(GenerateColRowTitleRange(CStr(lastRw(ws)), "Row")).AutoFit
     
-    findWidth ws, "A", annexA("repeating").item("Col")
+    'Set up Reparing columns
+    'setupPrintArea_RepCol ws, "A", annexA("repeating").item("Col")
+    setupPrintArea_RepCol ws, "A", lastCl(ws)
+    'Set up rest of print area
+    
     
 
 End Sub
 
-Private Sub findWidth(ws, start, limit)
+Private Sub setupPrintArea_RepCol(ws As Worksheet, start As String, limit As String)
     
-    Dim c As Range
-    Dim str As String
-    Dim T As Double
-    T = 0
+    Dim largestCell, cellRange, headerRange As String
+    Dim lenHeader, lenCell As Integer
     
-    Debug.Print start
-    Debug.Print limit
+    lenCell = 0
     
-    str = start + ":" + limit
-    Debug.Print str
+    'Loop through columns
+    For i = Asc(start) To Asc(limit)
+        headerRange = Chr(i) & "1"
+        lenHeader = Len(Range(headerRange).text)
+        'Create the cell Range for each column starting from cell 2(taking out header cell)
+        cellRange = Chr(i) & "2:" & Chr(i) & CStr(lastRw(ws))
+        For Each c In Range(cellRange).Cells
+            If (Len(c.text) > lenCell) Then
+                lenCell = Len(c.text)
+                largestCell = c.address
+            End If
+        Next
         
-    For Each c In Range(str).Columns
-        T = T + c.ColumnWidth
-        Debug.Print c.address; "-> "; printgetLabelPixel; CStr(c.ColumnWidth); "     T ->: "; T
+        'Compare header and cell length
+        If (lenHeader > lenCell) Then
+            Range(headerRange).Value = arrangeHeader(Range(headerRange).Value)
+            'Autofit current column
+            Columns(Chr(i)).AutoFit
+        End If
     Next
-    Debug.Print T
-
-
 End Sub
 
 

@@ -5,10 +5,10 @@ Function findPropertyName(startSearch As String, endSearch As String, targetCol 
     Dim tmpDone As Boolean
     tmpDone = False
     'Loop Through range of cols to search'
-    For Each Col In Range(startSearch, endSearch).Columns
-        For Each Cell In Col.Cells
-            If Cell.Value = targetCol Then
-                targetAddress = Cell.address(False, False)
+    For Each col In Range(startSearch, endSearch).Columns
+        For Each cell In col.Cells
+            If cell.Value = targetCol Then
+                targetAddress = cell.address(False, False)
                 tmpDone = True
                 'Exit Inner loop'
                 Exit For
@@ -94,14 +94,14 @@ End Function
 'Function returns the idx location of a White Space in a String
 Function idxsWhiteSpaces(text As String) As Collection
     Dim idxs As New Collection
-    Dim idx As Integer
-    idx = 0
+    Dim IDX As Integer
+    IDX = 0
     Do While True
-        idx = InStr(idx + 1, text, " ", vbBinaryCompare)
-        If idx = 0 Then
+        IDX = InStr(IDX + 1, text, " ", vbBinaryCompare)
+        If IDX = 0 Then
             Exit Do
         End If
-        idxs.Add idx
+        idxs.Add IDX
     Loop
     
     'Return
