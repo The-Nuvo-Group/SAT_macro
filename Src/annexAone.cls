@@ -155,6 +155,7 @@ Private Sub setupPrintArea_RepCol(ws As Worksheet, start As String, limit As Str
         lenHeader = Len(Range(headerRange).text)
         'Create the cell Range for each column starting from cell 2(taking out header cell)
         cellRange = Chr(i) & "2:" & Chr(i) & CStr(lastRw(ws))
+        Debug.Print Chr(i); "1"
         For Each c In Range(cellRange).Cells
             If (Len(c.text) > lenCell) Then
                 lenCell = Len(c.text)
