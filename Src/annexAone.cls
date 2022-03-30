@@ -129,13 +129,32 @@ End Sub
 
 Public Sub setupPrintArea(ws As Worksheet)
 
+    Dim RepCols_width As Long
+    Dim dimensions As New Dictionary
+
     'AutoFit all columns and rows in Annex A
     Columns(GenerateColRowTitleRange(lastCl(ws), "Col")).AutoFit
     Rows(GenerateColRowTitleRange(CStr(lastRw(ws)), "Row")).AutoFit
     
     'Set up Reparing columns
-    'setupPrintArea_RepCol ws, "A", annexA("repeating").item("Col")
-    setupPrintArea_RepCol ws, "A", lastCl(ws)
+    setupPrintArea_RepCol ws, "A", annexA("repeating").item("Col")
+    
+    'setupPrintArea_RepCol ws, "A", lastCl(ws)
+    
+    'Get & Store width of RepCols
+    '
+    ' COMMENT: TO FIX THE SCALE ISSUE WHEN OBTAINING THE DIMENSIONS OF THE COLUMNS I'M MULTIPLING BY annexA("pagesetup")("sacling")
+    '          HOWEVER, annexA("pagesetup")("sacling") IS NOT IN % FORMAT NEED TO ARRANGE THAT
+    '
+    dimensions.Add "repCols", (Format(Range(GenerateColRowTitleRange(annexA("repeating").item("Col"), "Col")).Width / Application.InchesToPoints(1), "0.00") * 0.45)
+    'dimensions.Add "repCols", Range(GenerateColRowTitleRange(annexA("repeating").item("Col"), "Col")).Width
+    Debug.Print "REP COLS DIMENSION: "; dimensions("repCols")
+    Debug.Print "FIX DIMENSION: "; Format((annexA("marginsetup")("left") * 2 + dimensions("repCols")), "0.00")
+    Debug.Print "Dynamic Cols DIMENSION: "; 11 - (annexA("marginsetup")("left") * 2 + dimensions("repCols"))
+    'Debug.Print Application.InchesToPoints(2.5)
+    'dimensions.Add "dynCols", Format(((annexA("marginsetup")("left") * 2) + dimensions("repCols") - 11), "0.00")
+    
+    'printHashT dimensions
     'Set up rest of print area
     
     
@@ -155,7 +174,6 @@ Private Sub setupPrintArea_RepCol(ws As Worksheet, start As String, limit As Str
         lenHeader = Len(Range(headerRange).text)
         'Create the cell Range for each column starting from cell 2(taking out header cell)
         cellRange = Chr(i) & "2:" & Chr(i) & CStr(lastRw(ws))
-        Debug.Print Chr(i); "1"
         For Each c In Range(cellRange).Cells
             If (Len(c.text) > lenCell) Then
                 lenCell = Len(c.text)
@@ -165,10 +183,13 @@ Private Sub setupPrintArea_RepCol(ws As Worksheet, start As String, limit As Str
         
         'Compare header and cell length
         If (lenHeader > lenCell) Then
+            'Arrange header width
             Range(headerRange).Value = arrangeHeader(Range(headerRange).Value)
-            'Autofit current column
-            Columns(Chr(i)).AutoFit
         End If
+        'Autofit current column
+        Columns(Chr(i)).AutoFit
+        
+        Debug.Print Chr(i); " "; Columns(Chr(i)).Width; Format(Columns(Chr(i)).Width / Application.InchesToPoints(1), "0.00")
     Next
 End Sub
 
