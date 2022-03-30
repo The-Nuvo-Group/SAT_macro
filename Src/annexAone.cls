@@ -142,12 +142,16 @@ Public Sub setupPrintArea(ws As Worksheet)
     'setupPrintArea_RepCol ws, "A", lastCl(ws)
     
     'Get & Store width of RepCols
-    dimensions.Add "repCols", Format(Range(GenerateColRowTitleRange(annexA("repeating").item("Col"), "Col")).Width / 72, "0.00")
+    '
+    ' COMMENT: TO FIX THE SCALE ISSUE WHEN OBTAINING THE DIMENSIONS OF THE COLUMNS I'M MULTIPLING BY annexA("pagesetup")("sacling")
+    '          HOWEVER, annexA("pagesetup")("sacling") IS NOT IN % FORMAT NEED TO ARRANGE THAT
+    '
+    dimensions.Add "repCols", (Format(Range(GenerateColRowTitleRange(annexA("repeating").item("Col"), "Col")).Width / Application.InchesToPoints(1), "0.00") * 0.45)
     'dimensions.Add "repCols", Range(GenerateColRowTitleRange(annexA("repeating").item("Col"), "Col")).Width
     Debug.Print "REP COLS DIMENSION: "; dimensions("repCols")
     Debug.Print "FIX DIMENSION: "; Format((annexA("marginsetup")("left") * 2 + dimensions("repCols")), "0.00")
     Debug.Print "Dynamic Cols DIMENSION: "; 11 - (annexA("marginsetup")("left") * 2 + dimensions("repCols"))
-    Debug.Print Application.InchesToPoints(2.5)
+    'Debug.Print Application.InchesToPoints(2.5)
     'dimensions.Add "dynCols", Format(((annexA("marginsetup")("left") * 2) + dimensions("repCols") - 11), "0.00")
     
     'printHashT dimensions
@@ -185,7 +189,7 @@ Private Sub setupPrintArea_RepCol(ws As Worksheet, start As String, limit As Str
         'Autofit current column
         Columns(Chr(i)).AutoFit
         
-        Debug.Print Chr(i); " "; Columns(Chr(i)).Width; Format(Columns(Chr(i)).Width / 72, "0.00")
+        Debug.Print Chr(i); " "; Columns(Chr(i)).Width; Format(Columns(Chr(i)).Width / Application.InchesToPoints(1), "0.00")
     Next
 End Sub
 
