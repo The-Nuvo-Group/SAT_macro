@@ -1,4 +1,14 @@
 Attribute VB_Name = "AnnexAdditionalTools"
+'Scale down Row hight or Columns width
+'Input: Long, width/hight of column/row
+'       Integer, ration by which scale down is perform
+'Output: Long, new width/hight
+Function scaleDown(ByVal rcWidth As Double, ByVal ratio As Double) As Double
+    Dim percent As Double
+    percent = ratio / 100
+    scaleDown = Format(rcWidth * percent, "0.00")
+End Function
+
 'Find the largest word in an array of strings
 'Input: Array, an array of strings
 'Output: Integer, index of the largest word
