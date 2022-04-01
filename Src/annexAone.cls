@@ -139,12 +139,10 @@ Public Sub setupPrintArea(ws As Worksheet)
     Rows(GenerateColRowTitleRange(CStr(lastRw(ws)), "Row")).AutoFit
     
     'Set up Reparing columns
-    'setupPrintArea_RepCol ws, "A", annexA("repeating").item("Col")
-    'setupPrintArea_RepCol ws, "A", lastCl(ws)
+    setupPrintArea_RepCol ws, "A", lastCl(ws)
     
     ' --- CALCULATIONS ---
-    'Get width of RepCols
-    'scale down & store  width of:
+    'Get width of RepCols, scale down & store  width of:
     '   Repeating Columns,
     '   Repeating Columns with left & right annexes borders, and
     '   Dynamic Columns
