@@ -129,32 +129,59 @@ End Sub
 
 Public Sub setupPrintArea(ws As Worksheet)
 
+    Debug.Print "  SETTING UP PRINT AREA"
+    
+    Dim RepCols_width As Double
+    Dim dimensions As New Dictionary
+    
     'AutoFit all columns and rows in Annex A
     Columns(GenerateColRowTitleRange(lastCl(ws), "Col")).AutoFit
     Rows(GenerateColRowTitleRange(CStr(lastRw(ws)), "Row")).AutoFit
     
-    findWdith ws, "A", annexA("repeating").item("Col")
+    'Set up Reparing columns
+    setupPrintArea_RepCol ws, "A", annexA("repeating").item("Col")
     
-
+    ' --- CALCULATIONS ---
+    'Get width of RepCols, scale down & store  width of:
+    '   Repeating Columns,
+    '   Repeating Columns with left & right annexes borders, and
+    '   Dynamic Columns
+    RepCols_width = CDbl(Format(Range(GenerateColRowTitleRange(annexA("repeating").item("Col"), "Col")).Width / Application.InchesToPoints(1), "0.00"))
+    dimensions.Add "repCols", scaleDown(RepCols_width, CDbl(annexA("pagesetup")("scaling")))
+    dimensions.Add "repColsMrgs", Format((annexA("marginsetup")("left") * 2 + dimensions("repCols")), "0.00")
+    dimensions.Add "dynCols", 11 - dimensions("repColsMrgs")
+    ' --- CALCULATIONS ---
+    
 End Sub
 
-Private Sub findWdith(ws, start, limit)
+Private Sub setupPrintArea_RepCol(ws As Worksheet, start As String, limit As String)
     
-    Dim c As Range
-    Dim str As String
-    Dim T As Double
-    T = 0
+    Dim largestCell, cellRange, headerRange As String
+    Dim lenHeader, lenCell As Integer
     
-    str = start + ":" + limit
-    Debug.Print str
+    lenCell = 0
+    
+    'Loop through columns
+    For i = Asc(start) To Asc(limit)
+        headerRange = Chr(i) & "1"
+        lenHeader = Len(Range(headerRange).text)
+        'Create the cell Range for each column starting from cell 2(taking out header cell)
+        cellRange = Chr(i) & "2:" & Chr(i) & CStr(lastRw(ws))
+        For Each c In Range(cellRange).Cells
+            If (Len(c.text) > lenCell) Then
+                lenCell = Len(c.text)
+                largestCell = c.address
+            End If
+        Next
         
-    For Each c In Range(str).Columns
-        T = T + c.ColumnWidth
-        'Debug.Print c.ColumnWidth
+        'Compare header and cell length
+        If (lenHeader > lenCell) Then
+            'Arrange header width
+            Range(headerRange).Value = arrangeHeader(Range(headerRange).Value)
+        End If
+        'Autofit current column
+        Columns(Chr(i)).AutoFit
     Next
-    Debug.Print T
-
-
 End Sub
 
 
