@@ -142,22 +142,18 @@ Public Sub setupPrintArea(ws As Worksheet)
     'setupPrintArea_RepCol ws, "A", annexA("repeating").item("Col")
     'setupPrintArea_RepCol ws, "A", lastCl(ws)
     
+    ' --- CALCULATIONS ---
     'Get width of RepCols
+    'scale down & store  width of:
+    '   Repeating Columns,
+    '   Repeating Columns with left & right annexes borders, and
+    '   Dynamic Columns
     RepCols_width = CDbl(Format(Range(GenerateColRowTitleRange(annexA("repeating").item("Col"), "Col")).Width / Application.InchesToPoints(1), "0.00"))
-    'scale & store down width of RepCols
     dimensions.Add "repCols", scaleDown(RepCols_width, CDbl(annexA("pagesetup")("scaling")))
+    dimensions.Add "repColsMrgs", Format((annexA("marginsetup")("left") * 2 + dimensions("repCols")), "0.00")
+    dimensions.Add "dynCols", 11 - dimensions("repColsMrgs")
+    ' --- CALCULATIONS ---
     
-    Debug.Print "REP COLS DIMENSION: "; dimensions("repCols")
-    Debug.Print "REP COLS + MRGS DIMENSION: "; Format((annexA("marginsetup")("left") * 2 + dimensions("repCols")), "0.00")
-    Debug.Print "Dynamic Cols DIMENSION: "; 11 - (annexA("marginsetup")("left") * 2 + dimensions("repCols"))
-    'Debug.Print Application.InchesToPoints(2.5)
-    'dimensions.Add "dynCols", Format(((annexA("marginsetup")("left") * 2) + dimensions("repCols") - 11), "0.00"
-    printHashT dimensions
-    Debug.Print "@@@@"
-    'Set up rest of print area
-    
-    
-
 End Sub
 
 Private Sub setupPrintArea_RepCol(ws As Worksheet, start As String, limit As String)
