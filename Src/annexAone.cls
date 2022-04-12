@@ -217,7 +217,7 @@ End Sub
 
 
 Private Sub setupPrintArea_RepCol(ws As Worksheet, startCol As String, limitCol As String)
-    
+
     Dim largestCell, cellRange, headerRange As String
     Dim start, limit, lenHeader, lenCell As Integer
     
@@ -246,6 +246,8 @@ Private Sub setupPrintArea_RepCol(ws As Worksheet, startCol As String, limitCol 
         End If
         'Autofit current column
         Columns(Split(Cells(1, i).address, "$")(1)).AutoFit
+        'Reset lenCell for next Column
+        lenCell = 0
     Next
 
 End Sub
