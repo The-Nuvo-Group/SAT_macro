@@ -225,30 +225,27 @@ Private Sub setupPrintArea_RepCol(ws As Worksheet, startCol As String, limitCol 
     limit = Range((limitCol + ":" + limitCol)).Column
     
     lenCell = 0
-    
-    ' NEED TO MODIFY METHOD, CAUSE IT COAUSING SOME ISSUES ON THE HEADER ADJUSTMENT
-    
+        
     'Loop through columns
     For i = start To limit
-        Debug.Print Cell(1, i)
-'        headerRange = Chr(i) & "1"
-'        lenHeader = Len(Range(headerRange).text)
-'        'Create the cell Range for each column starting from cell 2(taking out header cell)
-'        cellRange = Chr(i) & "2:" & Chr(i) & CStr(lastRw(ws))
-'        For Each C In Range(cellRange).Cells
-'            If (Len(C.text) > lenCell) Then
-'                lenCell = Len(C.text)
-'                largestCell = C.address
-'            End If
-'        Next
-'
-'        'Compare header and cell length
-'        If (lenHeader > lenCell) Then
-'            'Arrange header width
-'            Range(headerRange).Value = arrangeHeader(Range(headerRange).Value)
-'        End If
-'        'Autofit current column
-'        Columns(Chr(i)).AutoFit
+        headerRange = Split(Cells(1, i).address, "$")(1) & "1"
+        lenHeader = Len(Range(headerRange).text)
+        'Create the cell Range for each column starting from cell 2(taking out header cell)
+        cellRange = Split(Cells(1, i).address, "$")(1) & "2:" & Split(Cells(1, i).address, "$")(1) & CStr(lastRw(ws))
+        For Each C In Range(cellRange).Cells
+            If (Len(C.text) > lenCell) Then
+                lenCell = Len(C.text)
+                largestCell = C.address
+            End If
+        Next
+
+        'Compare header and cell length
+        If (lenHeader > lenCell) Then
+            'Arrange header width
+            Range(headerRange).Value = arrangeHeader(Range(headerRange).Value)
+        End If
+        'Autofit current column
+        Columns(Split(Cells(1, i).address, "$")(1)).AutoFit
     Next
 End Sub
 
