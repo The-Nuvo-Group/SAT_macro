@@ -129,7 +129,7 @@ End Sub
 
 Public Sub setupPrintArea(ws As Worksheet)
 
-    Debug.Print "  SETTING UP PRINT AREA"
+   Debug.Print " Method - setupPrintArea"
     
     Dim RepCols_width As Double
     Dim dimensions As New Dictionary
@@ -154,21 +154,13 @@ Public Sub setupPrintArea(ws As Worksheet)
     ' --- CALCULATIONS ---
     
     'Set up Dynamic columns
-    'setupPrintArea_DynCol ws, annexA("repeating")("Col"), dimensions("dynCols")
+    setupPrintArea_DynCol ws, annexA("repeating")("Col"), dimensions("dynCols")
     
 End Sub
 
 Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String, y As Double)
+    Debug.Print " Method - setupPrintArea_DynCol"
     Debug.Print "####"
-'    Dim tmp As String
-'    Debug.Print "Setoff Column: "; Chr(columnSetoff); columnSetoff
-'    Debug.Print "Last Column in Annex: "; lastCl(ws); Asc(lastCl(ws))
-'    Debug.Print y
-'    Debug.Print Asc("Z")
-'    tmp = Chr(columnSetoff) + ":" + lastCl(ws)
-'    tmp = lastCl(ws) + ":" + lastCl(ws)
-'    Debug.Print Range(tmp).Column
-    
     Dim start, lmt As Integer
     
     start = Range((columnSetoff + ":" + columnSetoff)).Column + 1
@@ -185,12 +177,12 @@ Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String,
     Debug.Print "END: "; lmt
 
     For i = start To lmt
-'        cw = Format(Columns(i).Width / Application.InchesToPoints(1), "0.00")
-'        Debug.Print cw
-        cw = Format(Columns(i).ColumnWidth / Application.InchesToPoints(1), "0.00")
+        cw = Format(Columns(i).Width / Application.InchesToPoints(1), "0.00")
+        'cw = Format(Columns(i).ColumnWidth / Application.InchesToPoints(1), "0.00")
         tcw = tcw + cw
-        Debug.Print Columns(i).address; " - Widht: "; cw; " - Total wc: "; tcw; " - Length: "; y
+        Debug.Print Columns(i).address; " | Widht: "; cw; " | Total wc: "; tcw; " | Length: "; y
         If tcw > y Then
+            Debug.Print "tcw > y"
             tcw = Format(tcw - cw, "0.00")
             delta = Format(y - tcw, "0.00")
             spreadDelta = Format((i - colCounter) / delta, "0.00")
@@ -200,7 +192,7 @@ Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String,
             Debug.Print "**spreadDelta: "; spreadDelta
             adjustWidths strSubset, i - 1, spreadDelta
             strSubset = i
-            twc = 0
+            tcw = 0#
         End If
     Next i
     
@@ -208,15 +200,28 @@ Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String,
     
 End Sub
 
-Private Sub adjustWidths(colStart As Integer, colEnd As Integer, amount As Double)
-    Debug.Print "ADJUSTING WIDTHS"
+Private Sub adjustWidths(colStart As Integer, colEnd As Integer, delta As Double)
+    Debug.Print " Method - adjustWidths"
+    
+    Dim iter As Long
+    Dim newWidth As Double
+    
+    
     For i = colStart To colEnd
-        Columns(i).ColumnWidth = Format(Columns(i).ColumnWidth / Application.InchesToPoints(1), "0.00") + amount
+        ' NEWWIDTH IS IN POINTS
+         newWidth = Columns(i).Width + delta
+        'SETTING WIDTHS IN POINTS
+        For iter = 1 To 3
+            Columns(i).ColumnWidth = newWidth / Columns(i).Width * Columns(i).ColumnWidth
+            ' Columns(i).ColumnWidth = Format(Columns(i).Width / Application.InchesToPoints(1), "0.00") + delta
+        Next iter
     Next i
 End Sub
 
 
 Private Sub setupPrintArea_RepCol(ws As Worksheet, startCol As String, limitCol As String)
+
+    Debug.Print " Method - setupPrintArea_RepCol"
 
     Dim largestCell, cellRange, headerRange As String
     Dim start, limit, lenHeader, lenCell As Integer
@@ -242,7 +247,7 @@ Private Sub setupPrintArea_RepCol(ws As Worksheet, startCol As String, limitCol 
         'Compare header and cell length
         If (lenHeader > lenCell) Then
             'Arrange header width
-            Range(headerRange).Value = arrangeHeader(Range(headerRange).Value)
+            Range(headerRange).value = arrangeHeader(Range(headerRange).value)
         End If
         'Autofit current column
         Columns(Split(Cells(1, i).address, "$")(1)).AutoFit
