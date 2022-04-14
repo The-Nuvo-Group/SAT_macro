@@ -159,8 +159,19 @@ Public Sub setupPrintArea(ws As Worksheet)
 End Sub
 
 Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String, y As Double)
-    Debug.Print " Method - setupPrintArea_DynCol"
+    
     Debug.Print "####"
+    Debug.Print " Method - setupPrintArea_DynCol"
+    
+    ' FOR ANALYSIS - DELETE LATER
+    Dim fname As String
+    fname = "C:\Users\jairo\Desktop\Me\ExcelMacro\LiveRepo\Excel-Tools\Src\Analysis\" & Format(Now, "dd-mm-yyyy-hh-mm-ss") & ".txt"
+    Dim FSO As New FileSystemObject
+    Set FSO = CreateObject("Scripting.FileSystemObject")
+    Set FileToWrite = FSO.CreateTextFile(fname, ForWriting)
+    ' FOR ANALYSIS - DELETE LATER
+    
+    
     Dim start, lmt As Integer
     
     start = Range((columnSetoff + ":" + columnSetoff)).Column + 1
@@ -168,36 +179,63 @@ Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String,
     
     Dim cw, tcw, delta, spreadDelta  As Double
     Dim numCols, colCounter, endSubset, strSubset As Integer
-    'Dim strSubset As Integer
+    
     tcw = 0#
     colCounter = start
     strSubset = start
     
     Debug.Print "START: "; start
     Debug.Print "END: "; lmt
+    
+    ' FOR ANALYSIS - DELETE LATER
+    FileToWrite.WriteLine "START OF setupPrintArea_DynCol"
+    FileToWrite.WriteLine "STRAT: " & start
+    FileToWrite.WriteLine "END: " & lmt
+    ' FOR ANALYSIS - DELETE LATER
 
     For i = start To lmt
+        
+        'NOTE:
+        '   TRYING NEW APPROACH - INSTEAD OF CONVERTING FROM POINTS TO INCHES, LET JUST HANDLE ALL THE MEASURMENT IN POINTS
+        '   WHICH IS EXCEL'S DEFAULT UNIT OF MEASURMENT
+        '   NEED TO REVISE: setupPrintArea_RepCol
+        
         cw = Format(Columns(i).Width / Application.InchesToPoints(1), "0.00")
-        'cw = Format(Columns(i).ColumnWidth / Application.InchesToPoints(1), "0.00")
+        'cw = scaleDown(cw, CDbl(annexA("pagesetup")("scaling")))
         tcw = tcw + cw
-        Debug.Print Columns(i).address; " | Widht: "; cw; " | Total wc: "; tcw; " | Length: "; y
+        
+        ' FOR ANALYSIS - DELETE LATER
+        FileToWrite.WriteLine Columns(i).address & " | Widht: " & CStr(cw) & " | Total wc: " & CStr(tcw) & " | Length: " & CStr(y)
+        ' FOR ANALYSIS - DELETE LATER
+        
         If tcw > y Then
-            Debug.Print "tcw > y"
             tcw = Format(tcw - cw, "0.00")
             delta = Format(y - tcw, "0.00")
-            spreadDelta = Format((i - colCounter) / delta, "0.00")
-            Debug.Print "i: "; i; " - colCounter: "; colCounter; " (i-colCounter): "; (i - colCounter)
-            Debug.Print "**tcw: "; tcw
-            Debug.Print "**Delta: "; delta
-            Debug.Print "**spreadDelta: "; spreadDelta
+            spreadDelta = Format(delta / (i - colCounter), "0.00")
+            
+            ' FOR ANALYSIS - DELETE LATER
+            FileToWrite.WriteLine " tcw > y"
+            FileToWrite.WriteLine "i: " & CStr(i) & " - colCounter: " & CStr(colCounter) & " (i-colCounter): " & CStr(i - colCounter)
+            FileToWrite.WriteLine "**tcw: " & CStr(tcw)
+            FileToWrite.WriteLine "**Delta: " & CStr(delta)
+            FileToWrite.WriteLine "**spreadDelta: " & CStr(spreadDelta)
+            FileToWrite.WriteLine " ----------------------------------- "
+            ' FOR ANALYSIS - DELETE LATER
+            
             adjustWidths strSubset, i - 1, spreadDelta
+            
             strSubset = i
+            colCounter = i
             tcw = 0#
+            delta = 0#
+            spreadDelta = 0#
         End If
     Next i
     
-    Debug.Print "####"
+    FileToWrite.Close
     
+    Debug.Print "####"
+
 End Sub
 
 Private Sub adjustWidths(colStart As Integer, colEnd As Integer, delta As Double)
@@ -247,7 +285,7 @@ Private Sub setupPrintArea_RepCol(ws As Worksheet, startCol As String, limitCol 
         'Compare header and cell length
         If (lenHeader > lenCell) Then
             'Arrange header width
-            Range(headerRange).value = arrangeHeader(Range(headerRange).value)
+            Range(headerRange).Value = arrangeHeader(Range(headerRange).Value)
         End If
         'Autofit current column
         Columns(Split(Cells(1, i).address, "$")(1)).AutoFit
