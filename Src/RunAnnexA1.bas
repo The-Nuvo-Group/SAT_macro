@@ -12,8 +12,6 @@ Sub Main()
     
     Annex.setupAnnexPages ws
     
-    Annex.setupPrintArea ws
-    
     'Annex.printConfig
       
     Debug.Print "****"

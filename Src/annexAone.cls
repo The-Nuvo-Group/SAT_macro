@@ -38,6 +38,7 @@ Public Sub setupAnnexPages(ws As Worksheet)
     Call sectionMarginsSetup(ws, annexA("marginsetup"))
     Call sectionHeaderFooterSetup(ws, annexA("headerfootersetup"))
     Call sectionRepeatRowColSetup(ws)
+    Call SectionPrintArea(ws)
     Debug.Print "WORKING MODE END"
     
 
@@ -127,7 +128,7 @@ Private Sub sectionRepeatRowColSetup(ws)
 
 End Sub
 
-Public Sub setupPrintArea(ws As Worksheet)
+Private Sub SectionPrintArea(ws As Worksheet)
 
    Debug.Print " Method - setupPrintArea"
     
