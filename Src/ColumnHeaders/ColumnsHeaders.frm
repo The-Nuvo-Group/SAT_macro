@@ -1,7 +1,7 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} ColumnsHeaders 
    Caption         =   "Column Headers"
-   ClientHeight    =   1950
+   ClientHeight    =   5565
    ClientLeft      =   120
    ClientTop       =   465
    ClientWidth     =   6930
@@ -35,12 +35,11 @@ End Function
 
 Private Sub RunButton_Click()
     
-    
     Dim hdrRange As String
     hdrRange = RowRangeToHeaderRange(Split(HeadersRefEdit.Text, "!")(1), "A", lastCl())
 
     Dim headerData, topCell, bottomCell As Collection
-    Dim txt, cellAddress As String
+    Dim txt, log, cellAddress As String
     Dim counter As Integer
 
     Set headerData = New Collection
@@ -61,15 +60,34 @@ Private Sub RunButton_Click()
 
             txt = txt & cell.Value & " "
             counter = counter + 1
+            
+            'Recording Cells specs
+            log = log & "******" & vbNewLine
+            log = log & "CELL: " & cell.address & vbNewLine
+            log = log & "COLOR: " & cell.Font.Color & vbNewLine
+            log = log & "SZIE: " & cell.Font.Size & vbNewLine
+            log = log & "TYPE: " & cell.Font.Name & vbNewLine
+            log = log & "BOLD: " & cell.Font.Bold & vbNewLine
+            log = log & "ALINGMENT: " & cell.HorizontalAlignment & vbNewLine
+            log = log & vbNewLine
+            
+            
 
         Next
+                
         Debug.Print txt
         headerData.Add txt
         txt = ""
         counter = 1
     Next
+    
+    'Displying Cells Specs
+    LogOutputTB.WordWrap = False
+    LogOutputTB.MultiLine = True
+    LogOutputTB.ScrollBars = 3
+    LogOutputTB.Value = log
 
-    'Clear Content
+    'Clear Content in Range
     Range(HeadersRefEdit).ClearContents
 
     Dim i As Long
@@ -77,8 +95,12 @@ Private Sub RunButton_Click()
         Range(topCell(i), bottomCell(i)).Merge
         Range(topCell(i), bottomCell(i)).Value = headerData(i)
         Range(topCell(i), bottomCell(i)).WrapText = True
+        Range(topCell(i), bottomCell(i)).Font.Bold = True
 
     Next
     
+    Set headerData = Nothing
+    Set topCell = Nothing
+    Set bottomCell = Nothing
       
 End Sub
