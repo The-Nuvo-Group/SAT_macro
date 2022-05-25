@@ -63,6 +63,15 @@ Private Function RowRangeToHeaderRange(ByVal originalRange As String, startRange
 
 End Function
 
+Private Function getNewHdrRange(ByVal originalRange As String, startRange As String, limitRange As String) As String
+    Dim toprow As String
+    
+    toprow = Mid(Split(originalRange, ":")(0), 2, Len(Split(originalRange, ":")(0)))
+    
+    getNewHdrRange = startRange & toprow & ":" & limitRange & toprow
+    
+End Function
+
 Private Function LogOutputTB_run(log As String)
 
     'Displying Cells Specs
@@ -76,8 +85,9 @@ End Function
 
 Private Sub RunButton_Click()
     
-    Dim hdrRange As String
+    Dim hdrRange, newhdrRange As String
     hdrRange = RowRangeToHeaderRange(Split(HeadersRefEdit.Text, "!")(1), "A", lastCl())
+    newhdrRange = getNewHdrRange(Split(HeadersRefEdit.Text, "!")(1), "A", lastCl())
 
     Dim headerData, topCell, bottomCell As Collection
     Dim txt, log, cellAddress, toDeleteRange As String
@@ -127,18 +137,24 @@ Private Sub RunButton_Click()
     'Delete Rows
     Rows(getRangeRowsToDelete(Split(HeadersRefEdit.Text, "!")(1))).EntireRow.Delete
     
+    'Repopulate standing Row
+    Dim i As Long
+    For i = 1 To topCell.Count
+        Range(topCell(i)).Value = "BLABLA"
+    Next
     
-'
-'    Dim i As Long
-'    For i = 1 To topCell.Count
+    Debug.Print newhdrRange
+    
+    
+    
 '        Range(topCell(i), bottomCell(i)).Merge
 '        Range(topCell(i), bottomCell(i)).Value = headerData(i)
 '        Range(topCell(i), bottomCell(i)).WrapText = True
 '        Range(topCell(i), bottomCell(i)).Font.Bold = True
 '    Next
 '
-'    Set headerData = Nothing
-'    Set topCell = Nothing
-'    Set bottomCell = Nothing
+    Set headerData = Nothing
+    Set topCell = Nothing
+    Set bottomCell = Nothing
       
 End Sub
