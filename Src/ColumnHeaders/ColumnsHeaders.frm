@@ -23,11 +23,41 @@ Private Function lastCl() As String
 
 End Function
 
+Private Function baseRow(ByVal originalRange As String) As String
+
+    baseRow = Right(Split(originalRange, ":")(1), 2)
+
+End Function
+
+Private Function getRangeRowsToDelete(ByVal originalRange As String) As String
+    'Array of 2 elements
+    Dim rowsLimits(2) As String
+    
+    'Reference ->   $2:$5
+    If Len(Split(originalRange, ":")(0)) = 2 Then
+        rowsLimits(0) = Right(Split(originalRange, ":")(0), 1)
+    End If
+    If Len(Split(originalRange, ":")(0)) = 2 Then
+        rowsLimits(1) = CStr(CInt(Right(Split(originalRange, ":")(1), 1)) - 1)
+    End If
+    
+    
+    'Reference ->   $12:$15
+    If Len(Split(originalRange, ":")(0)) = 3 Then
+        rowsLimits(0) = Right(Split(originalRange, ":")(0), 2)
+    End If
+    If Len(Split(originalRange, ":")(0)) = 3 Then
+        rowsLimits(1) = CStr(CInt(Right(Split(originalRange, ":")(1), 2)) - 1)
+    End If
+    
+    getRangeRowsToDelete = rowsLimits(0) & ":" & rowsLimits(1)
+
+End Function
+
 Private Function RowRangeToHeaderRange(ByVal originalRange As String, startRange As String, limitRange As String) As String
     Dim fst, snd As String
     fst = Left(Split(originalRange, ":")(0), 1) & startRange & "$" & Mid(Split(originalRange, ":")(0), 2, Len(Split(originalRange, ":")(0)))
     snd = Left(Split(originalRange, ":")(1), 1) & limitRange & "$" & Mid(Split(originalRange, ":")(1), 2, Len(Split(originalRange, ":")(1)))
-    'Debug.Print fst & ":" & snd
     
     RowRangeToHeaderRange = fst & ":" & snd
 
@@ -50,28 +80,28 @@ Private Sub RunButton_Click()
     hdrRange = RowRangeToHeaderRange(Split(HeadersRefEdit.Text, "!")(1), "A", lastCl())
 
     Dim headerData, topCell, bottomCell As Collection
-    Dim txt, log, cellAddress As String
-    Dim counter As Integer
+    Dim txt, log, cellAddress, toDeleteRange As String
+    Dim CellCounter As Integer
 
     Set headerData = New Collection
     Set topCell = New Collection
     Set bottomCell = New Collection
     txt = ""
-    counter = 1
-
+    CellCounter = 1
+  
     For Each col In Range(hdrRange).Columns
         For Each cell In col.Cells
-            If counter = 1 Then
+            If CellCounter = 1 Then
                 topCell.Add cell.address
             End If
 
-            If counter = Range(HeadersRefEdit).Rows.Count Then
+            If CellCounter = Range(HeadersRefEdit).Rows.Count Then
                 bottomCell.Add cell.address
             End If
 
             txt = txt & cell.Value & " "
-            counter = counter + 1
-            
+            CellCounter = CellCounter + 1
+
             'Recording Cells specs
             log = log & "******" & vbNewLine
             log = log & "CELL: " & cell.address & vbNewLine
@@ -81,33 +111,34 @@ Private Sub RunButton_Click()
             log = log & "BOLD: " & cell.Font.Bold & vbNewLine
             log = log & "ALINGMENT: " & cell.HorizontalAlignment & vbNewLine
             log = log & vbNewLine
-            
         Next
-                
-        Debug.Print txt
+
         headerData.Add txt
         txt = ""
         counter = 1
     Next
-        
+
     'Display in TextBox
     LogOutputTB_run (log)
-
-
+    
     'Clear Content in Range
     Range(HeadersRefEdit).ClearContents
 
-    Dim i As Long
-    For i = 1 To topCell.Count
-        Range(topCell(i), bottomCell(i)).Merge
-        Range(topCell(i), bottomCell(i)).Value = headerData(i)
-        Range(topCell(i), bottomCell(i)).WrapText = True
-        Range(topCell(i), bottomCell(i)).Font.Bold = True
-
-    Next
+    'Delete Rows
+    Rows(getRangeRowsToDelete(Split(HeadersRefEdit.Text, "!")(1))).EntireRow.Delete
     
-    Set headerData = Nothing
-    Set topCell = Nothing
-    Set bottomCell = Nothing
+    
+'
+'    Dim i As Long
+'    For i = 1 To topCell.Count
+'        Range(topCell(i), bottomCell(i)).Merge
+'        Range(topCell(i), bottomCell(i)).Value = headerData(i)
+'        Range(topCell(i), bottomCell(i)).WrapText = True
+'        Range(topCell(i), bottomCell(i)).Font.Bold = True
+'    Next
+'
+'    Set headerData = Nothing
+'    Set topCell = Nothing
+'    Set bottomCell = Nothing
       
 End Sub
