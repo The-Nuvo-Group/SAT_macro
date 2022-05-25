@@ -13,7 +13,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Function lastCl() As String
+Private Function lastCl() As String
 
     ' Get Last Column Number with Data '
     colNumber = Cells(3, Columns.Count).End(xlToLeft).Column
@@ -23,13 +23,24 @@ Function lastCl() As String
 
 End Function
 
-Function RowRangeToHeaderRange(ByVal originalRange As String, startRange As String, limitRange As String) As String
+Private Function RowRangeToHeaderRange(ByVal originalRange As String, startRange As String, limitRange As String) As String
     Dim fst, snd As String
     fst = Left(Split(originalRange, ":")(0), 1) & startRange & "$" & Mid(Split(originalRange, ":")(0), 2, Len(Split(originalRange, ":")(0)))
     snd = Left(Split(originalRange, ":")(1), 1) & limitRange & "$" & Mid(Split(originalRange, ":")(1), 2, Len(Split(originalRange, ":")(1)))
     'Debug.Print fst & ":" & snd
     
     RowRangeToHeaderRange = fst & ":" & snd
+
+End Function
+
+Private Function LogOutputTB_run(log As String)
+
+    'Displying Cells Specs
+    LogOutputTB.WordWrap = False
+    LogOutputTB.MultiLine = True
+    LogOutputTB.ScrollBars = 3
+    
+    LogOutputTB.Value = log
 
 End Function
 
@@ -71,8 +82,6 @@ Private Sub RunButton_Click()
             log = log & "ALINGMENT: " & cell.HorizontalAlignment & vbNewLine
             log = log & vbNewLine
             
-            
-
         Next
                 
         Debug.Print txt
@@ -80,12 +89,10 @@ Private Sub RunButton_Click()
         txt = ""
         counter = 1
     Next
-    
-    'Displying Cells Specs
-    LogOutputTB.WordWrap = False
-    LogOutputTB.MultiLine = True
-    LogOutputTB.ScrollBars = 3
-    LogOutputTB.Value = log
+        
+    'Display in TextBox
+    LogOutputTB_run (log)
+
 
     'Clear Content in Range
     Range(HeadersRefEdit).ClearContents
