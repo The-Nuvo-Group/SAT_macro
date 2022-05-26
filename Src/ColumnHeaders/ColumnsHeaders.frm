@@ -99,33 +99,33 @@ Private Sub RunButton_Click()
     txt = ""
     CellCounter = 1
   
-    For Each col In Range(hdrRange).Columns
-        For Each cell In col.Cells
+    For Each Col In Range(hdrRange).Columns
+        For Each Cell In Col.Cells
             If CellCounter = 1 Then
-                topCell.Add cell.address
+                topCell.Add Cell.address
             End If
 
             If CellCounter = Range(HeadersRefEdit).Rows.Count Then
-                bottomCell.Add cell.address
+                bottomCell.Add Cell.address
             End If
 
-            txt = txt & cell.Value & " "
+            txt = txt & Cell.Value & " "
             CellCounter = CellCounter + 1
 
             'Recording Cells specs
             log = log & "******" & vbNewLine
-            log = log & "CELL: " & cell.address & vbNewLine
-            log = log & "COLOR: " & cell.Font.Color & vbNewLine
-            log = log & "SZIE: " & cell.Font.Size & vbNewLine
-            log = log & "TYPE: " & cell.Font.Name & vbNewLine
-            log = log & "BOLD: " & cell.Font.Bold & vbNewLine
-            log = log & "ALINGMENT: " & cell.HorizontalAlignment & vbNewLine
+            log = log & "CELL: " & Cell.address & vbNewLine
+            log = log & "COLOR: " & Cell.Font.Color & vbNewLine
+            log = log & "SZIE: " & Cell.Font.Size & vbNewLine
+            log = log & "TYPE: " & Cell.Font.Name & vbNewLine
+            log = log & "BOLD: " & Cell.Font.Bold & vbNewLine
+            log = log & "ALINGMENT: " & Cell.HorizontalAlignment & vbNewLine
             log = log & vbNewLine
         Next
 
         headerData.Add txt
         txt = ""
-        counter = 1
+        CellCounter = 1
     Next
 
     'Display in TextBox
@@ -138,21 +138,19 @@ Private Sub RunButton_Click()
     Rows(getRangeRowsToDelete(Split(HeadersRefEdit.Text, "!")(1))).EntireRow.Delete
     
     'Repopulate standing Row
-    Dim i As Long
+    Dim i As Integer
     For i = 1 To topCell.Count
-        Range(topCell(i)).Value = "BLABLA"
+        Range(topCell(i)).Value = headerData(i)
     Next
     
-    Debug.Print newhdrRange
+    'Row Specs
+    With Range(newhdrRange)
+    .Font.Bold = True
+    .WrapText = True
+    .EntireRow.AutoFit
+    End With
     
-    
-    
-'        Range(topCell(i), bottomCell(i)).Merge
-'        Range(topCell(i), bottomCell(i)).Value = headerData(i)
-'        Range(topCell(i), bottomCell(i)).WrapText = True
-'        Range(topCell(i), bottomCell(i)).Font.Bold = True
-'    Next
-'
+    'Clear up Memory space
     Set headerData = Nothing
     Set topCell = Nothing
     Set bottomCell = Nothing
