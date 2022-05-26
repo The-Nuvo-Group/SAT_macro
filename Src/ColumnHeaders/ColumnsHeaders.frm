@@ -14,7 +14,6 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Function lastCl() As String
-
     ' Get Last Column Number with Data '
     colNumber = Cells(3, Columns.Count).End(xlToLeft).Column
     
@@ -24,7 +23,6 @@ Private Function lastCl() As String
 End Function
 
 Private Function baseRow(ByVal originalRange As String) As String
-
     baseRow = Right(Split(originalRange, ":")(1), 2)
 
 End Function
@@ -40,7 +38,6 @@ Private Function getRangeRowsToDelete(ByVal originalRange As String) As String
     If Len(Split(originalRange, ":")(0)) = 2 Then
         rowsLimits(1) = CStr(CInt(Right(Split(originalRange, ":")(1), 1)) - 1)
     End If
-    
     
     'Reference ->   $12:$15
     If Len(Split(originalRange, ":")(0)) = 3 Then
@@ -73,7 +70,6 @@ Private Function getNewHdrRange(ByVal originalRange As String, startRange As Str
 End Function
 
 Private Function LogOutputTB_run(log As String)
-
     'Displying Cells Specs
     LogOutputTB.WordWrap = False
     LogOutputTB.MultiLine = True
@@ -84,19 +80,20 @@ Private Function LogOutputTB_run(log As String)
 End Function
 
 Private Sub RunButton_Click()
-    
     Dim hdrRange, newhdrRange As String
     hdrRange = RowRangeToHeaderRange(Split(HeadersRefEdit.Text, "!")(1), "A", lastCl())
     newhdrRange = getNewHdrRange(Split(HeadersRefEdit.Text, "!")(1), "A", lastCl())
 
-    Dim headerData, topCell, bottomCell As Collection
+    Dim headerData, topCell, bottomCell, alignSetting As Collection
     Dim txt, log, cellAddress, toDeleteRange As String
     Dim CellCounter As Integer
 
     Set headerData = New Collection
     Set topCell = New Collection
     Set bottomCell = New Collection
-    txt = ""
+    Set alignSetting = New Collection
+    
+    'txt = ""
     CellCounter = 1
   
     For Each Col In Range(hdrRange).Columns
@@ -106,7 +103,12 @@ Private Sub RunButton_Click()
             End If
 
             If CellCounter = Range(HeadersRefEdit).Rows.Count Then
+                
                 bottomCell.Add Cell.address
+                
+                'Recording Alignment Property
+                alignSetting.Add Cell.HorizontalAlignment
+                
             End If
 
             txt = txt & Cell.Value & " "
@@ -141,6 +143,7 @@ Private Sub RunButton_Click()
     Dim i As Integer
     For i = 1 To topCell.Count
         Range(topCell(i)).Value = headerData(i)
+        Range(topCell(i)).HorizontalAlignment = alignSetting(i)
     Next
     
     'Row Specs
