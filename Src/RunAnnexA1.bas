@@ -5,14 +5,12 @@ Sub Main()
     
     
     Dim ws As Worksheet
-    Set ws = Worksheets(1)
-    ws.Activate
+    Set ws = Worksheets(ActiveSheet.Index)
+    'ws.Activate
         
     Annex.readConfig "C:\Users\jairo\Desktop\Me\ExcelMacro\LiveRepo\Excel-Tools\Src\Config\annexa1Config.json"
     
     Annex.setupAnnexPages ws
-    
-    Annex.setupPrintArea ws
     
     'Annex.printConfig
       
