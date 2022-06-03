@@ -41,8 +41,6 @@ Private Sub UserForm_Initialize()
     configFilesLocation = "O:\31__Nuvo Programs\Excel_ConfigFiles\"
     cfExtension = "*.json"
     
-    'safeFail_configFiles configFilesLocation, cfExtension
-    
     Dim configFilesName As Collection
     Set configFilesName = get_configFileNames(configFilesLocation, cfExtension)
 
