@@ -13,7 +13,24 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+'Global
+Private configFilesName As Collection
 
+Private Sub UserForm_Initialize()
+    
+    Dim configFilesLocation, cfExtension As String
+    configFilesLocation = "O:\31__Nuvo Programs\Excel_ConfigFiles\"
+    cfExtension = "*.json"
+    
+    'Setting global var
+    Set configFilesName = get_configFileNames(configFilesLocation, cfExtension)
+    
+    Debug.Print VarType(configFilesName(1))
+
+    ConfigFilesMenu.Value = configFilesName(1)(0)
+    ConfigFilesMenu.List = configFilesName(1)
+    
+End Sub
 
 Private Sub BtnRunAnnexAMacro_Click()
 
@@ -24,28 +41,12 @@ Private Sub BtnRunAnnexAMacro_Click()
     Dim ws As Worksheet
     Set ws = Worksheets(ActiveSheet.Index)
     'ws.Activate
-        
-    Annex.readConfig "C:\Users\jairo\Desktop\Me\ExcelMacro\LiveRepo\Excel-Tools\Src\Config\annexa1Config.json"
     
-    'AnnexAControlPanel.Show
+    'Get the PATH of the configFile the user selected from the dropdown menu
+    Annex.readConfig CStr(configFilesName(2)(ConfigFilesMenu.ListIndex))
     
-    Annex.setupAnnexPages ws
+    'Annex.setupAnnexPages ws
     
     Annex.printConfig
 
 End Sub
-
-Private Sub UserForm_Initialize()
-    
-    Dim configFilesLocation, cfExtension As String
-    configFilesLocation = "O:\31__Nuvo Programs\Excel_ConfigFiles\"
-    cfExtension = "*.json"
-    
-    Dim configFilesName As Collection
-    Set configFilesName = get_configFileNames(configFilesLocation, cfExtension)
-
-    ConfigFilesMenu.Value = configFilesName(1)(0)
-    ConfigFilesMenu.List = configFilesName(1)
-    
-End Sub
-
