@@ -1,20 +1,28 @@
 Attribute VB_Name = "RunAnnexA1"
 Sub Main()
-    Dim Annex As New annexAone
+
+    Dim configFilesLocation, cfExtension As String
+    configFilesLocation = "O:\31__Nuvo Programs\Excel_ConfigFiles\"
+    cfExtension = "*.json"
     
-    Dim ws As Worksheet
-    Set ws = Worksheets(2)
-    ws.Activate
+    
+    'Dim Annex As New annexAone
+    'Dim Px As New PixelRatio
+    
+    
+    'Dim ws As Worksheet
+    'Set ws = Worksheets(ActiveSheet.Index)
+    'ws.Activate
         
-    Annex.readConfig "C:\Users\jairo\Desktop\Me\ExcelMacro\LiveRepo\Excel-Tools\Src\Config\annexa1Config.json"
+    'Annex.readConfig "C:\Users\jairo\Desktop\Me\ExcelMacro\LiveRepo\Excel-Tools\Src\Config\annexa1Config.json"
     
-    Annex.printConfig
+    safeFail_configFiles configFilesLocation, cfExtension
+
+    AnnexAControlPanel.Show
     
-    Annex.setupAnnexPages ws
-    
-    Annex.setupPrintArea ws
-    
-   
+    'Annex.setupAnnexPages ws
+    'Annex.printConfig
+             
 End Sub
 
 
