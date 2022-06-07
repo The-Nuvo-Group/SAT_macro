@@ -150,6 +150,7 @@ Private Sub SectionPrintArea(ws As Worksheet)
     '   Dynamic Columns
     RepCols_width = CDbl(Format(Range(GenerateColRowTitleRange(annexA("repeating").item("Col"), "Col")).Width / Application.InchesToPoints(1), "0.00"))
     dimensions.Add "repCols", scaleDown(RepCols_width, CDbl(annexA("pagesetup")("scaling")))
+    'dimensions.Add "repCols", RepCols_width
     dimensions.Add "repColsMrgs", Format((annexA("marginsetup")("left") * 2 + dimensions("repCols")), "0.00")
     dimensions.Add "dynCols", 11 - dimensions("repColsMrgs")
     ' --- CALCULATIONS ---
@@ -201,8 +202,8 @@ Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String,
         '   WHICH IS EXCEL'S DEFAULT UNIT OF MEASURMENT
         '   NEED TO REVISE: setupPrintArea_RepCol
         
-        cw = Format(Columns(i).Width / Application.InchesToPoints(1), "0.00")
-        'cw = scaleDown(cw, CDbl(annexA("pagesetup")("scaling")))
+        cw = Columns(i).Width / Application.InchesToPoints(1)
+        cw = scaleDown(cw, 51.05)   'CDbl(annexA("pagesetup")("scaling")))
         tcw = tcw + cw
         
         ' FOR ANALYSIS - DELETE LATER
@@ -250,7 +251,7 @@ Private Sub adjustWidths(colStart As Integer, colEnd As Integer, delta As Double
         ' NEWWIDTH IS IN POINTS
          newWidth = Columns(i).Width + delta
         'SETTING WIDTHS IN POINTS
-        For iter = 1 To 3
+        For iter = 1 To 5
             Columns(i).ColumnWidth = newWidth / Columns(i).Width * Columns(i).ColumnWidth
             ' Columns(i).ColumnWidth = Format(Columns(i).Width / Application.InchesToPoints(1), "0.00") + delta
         Next iter
