@@ -1,14 +1,84 @@
 Attribute VB_Name = "AnnexAdditionalTools"
+'Scale down Row hight or Columns width
+'Input: Long, width/hight of column/row
+'       Integer, ration by which scale down is perform
+'Output: Long, new width/hight
+Function scaleDown(ByVal rcWidth As Double, ByVal ratio As Double) As Double
+    Dim percent As Double
+    percent = ratio / 100
+    scaleDown = Format(rcWidth * percent, "0.00")
+End Function
+
+'Find the largest word in an array of strings
+'Input: Array, an array of strings
+'Output: Integer, index of the largest word
+Function indexLargestWord(ByRef arrayofwords As Variant) As Integer
+    Dim IDX As Integer
+    Dim tmpWord As String
+    
+    'Find Largest Word and it index
+    tmpWord = arrayofwords(0)
+    For i = LBound(arrayofwords) To UBound(arrayofwords)
+        If Len(arrayofwords(i)) > Len(tmpWord) Then
+            tmpWord = arrayofwords(i)
+            IDX = CInt(i)
+        End If
+    Next i
+    indexLargestWord = IDX
+End Function
+
+'Arrange headers in a "saquare" like structure
+'Input: String, a header in string format
+'Output: String, same header but new-lines and spaces
+Function arrangeHeader(header As String) As String
+
+    Dim finalHeader, tmpWord As String
+    Dim largest, lrgIndx, i As Integer
+    Dim arrayofword() As String
+    
+    'Split string by spaces
+    arrayofwords = Split(header)
+    
+    lrgIndx = indexLargestWord(arrayofwords)
+    
+    'Re-arrange words to fit size
+    tmpWord = ""
+    For i = LBound(arrayofwords) To UBound(arrayofwords)
+        If (Len(tmpWord) + Len(arrayofwords(i))) <= Len(arrayofwords(lrgIndx)) Then
+            If Len(tmpWord) = 0 Then
+                tmpWord = arrayofwords(i)
+            Else
+                tmpWord = tmpWord + " " + arrayofwords(i)
+            End If
+        Else
+            finalHeader = finalHeader + tmpWord + Chr(10)
+            tmpWord = arrayofwords(i)
+            'Check if we are at the end of array
+            If (i = UBound(arrayofwords)) Then
+                finalHeader = finalHeader + arrayofwords(i)
+            End If
+        End If
+    Next i
+    
+    arrangeHeader = finalHeader
+
+End Function
+
+'Arrange headers in a "saquare" like structure
+'Input: String, cell address where range should start (e.g. "A1","X56, etc)
+'       String, cell address where range should end (e.g. "A1","X56, etc)
+'       String, string to be looked in range provided
+'Output: String, same header but new-lines and spaces
 Function findPropertyName(startSearch As String, endSearch As String, targetCol As String) As String
     
     Dim targetAddress As String
     Dim tmpDone As Boolean
     tmpDone = False
     'Loop Through range of cols to search'
-    For Each Col In Range(startSearch, endSearch).Columns
-        For Each Cell In Col.Cells
-            If Cell.Value = targetCol Then
-                targetAddress = Cell.address(False, False)
+    For Each col In Range(startSearch, endSearch).Columns
+        For Each cell In col.Cells
+            If cell.Value = targetCol Then
+                targetAddress = cell.address(False, False)
                 tmpDone = True
                 'Exit Inner loop'
                 Exit For
@@ -90,3 +160,22 @@ Function lastRw(ws As Worksheet) As Long
     lastRw = Cells(Rows.Count, 1).End(xlUp).Row
     
 End Function
+
+'Function returns the idx location of a White Space in a String
+Function idxsWhiteSpaces(text As String) As Collection
+    Dim idxs As New Collection
+    Dim IDX As Integer
+    IDX = 0
+    Do While True
+        IDX = InStr(IDX + 1, text, " ", vbBinaryCompare)
+        If IDX = 0 Then
+            Exit Do
+        End If
+        idxs.Add IDX
+    Loop
+    
+    'Return
+    Set idxsWhiteSpaces = idxs
+End Function
+
+

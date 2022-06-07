@@ -38,6 +38,7 @@ Public Sub setupAnnexPages(ws As Worksheet)
     Call sectionMarginsSetup(ws, annexA("marginsetup"))
     Call sectionHeaderFooterSetup(ws, annexA("headerfootersetup"))
     Call sectionRepeatRowColSetup(ws)
+    Call SectionPrintArea(ws)
     Debug.Print "WORKING MODE END"
     
 
@@ -127,33 +128,172 @@ Private Sub sectionRepeatRowColSetup(ws)
 
 End Sub
 
-Public Sub setupPrintArea(ws As Worksheet)
+Private Sub SectionPrintArea(ws As Worksheet)
 
+   Debug.Print " Method - setupPrintArea"
+    
+    Dim RepCols_width As Double
+    Dim dimensions As New Dictionary
+    
     'AutoFit all columns and rows in Annex A
     Columns(GenerateColRowTitleRange(lastCl(ws), "Col")).AutoFit
     Rows(GenerateColRowTitleRange(CStr(lastRw(ws)), "Row")).AutoFit
     
-    findWdith ws, "A", annexA("repeating").item("Col")
+    'Set up Reparing columns
+    'setupPrintArea_RepCol ws, "A", annexA("repeating").item("Col")
+    setupPrintArea_RepCol ws, "A", lastCl(ws)
     
+    ' --- CALCULATIONS ---
+    'Get width of RepCols, scale down & store  width of:
+    '   Repeating Columns,
+    '   Repeating Columns with left & right annexes borders, and
+    '   Dynamic Columns
+    RepCols_width = CDbl(Format(Range(GenerateColRowTitleRange(annexA("repeating").item("Col"), "Col")).Width / Application.InchesToPoints(1), "0.00"))
+    dimensions.Add "repCols", scaleDown(RepCols_width, CDbl(annexA("pagesetup")("scaling")))
+    'dimensions.Add "repCols", RepCols_width
+    dimensions.Add "repColsMrgs", Format((annexA("marginsetup")("left") * 2 + dimensions("repCols")), "0.00")
+    dimensions.Add "dynCols", 11 - dimensions("repColsMrgs")
+    ' --- CALCULATIONS ---
+    
+    'Set up Dynamic columns
+    setupPrintArea_DynCol ws, annexA("repeating")("Col"), dimensions("dynCols")
+    
+End Sub
+
+Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String, y As Double)
+    
+    Debug.Print "####"
+    Debug.Print " Method - setupPrintArea_DynCol"
+    
+    ' FOR ANALYSIS - DELETE LATER
+    Dim fname As String
+    fname = "C:\Users\jairo\Desktop\Me\ExcelMacro\LiveRepo\Excel-Tools\Src\Analysis\" & Format(Now, "dd-mm-yyyy-hh-mm-ss") & ".txt"
+    Dim FSO As New FileSystemObject
+    Set FSO = CreateObject("Scripting.FileSystemObject")
+    Set FileToWrite = FSO.CreateTextFile(fname, ForWriting)
+    ' FOR ANALYSIS - DELETE LATER
+    
+    
+    Dim start, lmt As Integer
+    
+    start = Range((columnSetoff + ":" + columnSetoff)).Column + 1
+    lmt = Range((lastCl(ws) + ":" + lastCl(ws))).Column
+    
+    Dim cw, tcw, delta, spreadDelta  As Double
+    Dim numCols, colCounter, endSubset, strSubset As Integer
+    
+    tcw = 0#
+    colCounter = start
+    strSubset = start
+    
+    Debug.Print "START: "; start
+    Debug.Print "END: "; lmt
+    
+    ' FOR ANALYSIS - DELETE LATER
+    FileToWrite.WriteLine "START OF setupPrintArea_DynCol"
+    FileToWrite.WriteLine "STRAT: " & start
+    FileToWrite.WriteLine "END: " & lmt
+    ' FOR ANALYSIS - DELETE LATER
+
+    For i = start To lmt
+        
+        'NOTE:
+        '   TRYING NEW APPROACH - INSTEAD OF CONVERTING FROM POINTS TO INCHES, LET JUST HANDLE ALL THE MEASURMENT IN POINTS
+        '   WHICH IS EXCEL'S DEFAULT UNIT OF MEASURMENT
+        '   NEED TO REVISE: setupPrintArea_RepCol
+        
+        cw = Columns(i).Width / Application.InchesToPoints(1)
+        cw = scaleDown(cw, 51.05)   'CDbl(annexA("pagesetup")("scaling")))
+        tcw = tcw + cw
+        
+        ' FOR ANALYSIS - DELETE LATER
+        FileToWrite.WriteLine Columns(i).address & " | Widht: " & CStr(cw) & " | Total wc: " & CStr(tcw) & " | Length: " & CStr(y)
+        ' FOR ANALYSIS - DELETE LATER
+        
+        If tcw > y Then
+            tcw = Format(tcw - cw, "0.00")
+            delta = Format(y - tcw, "0.00")
+            spreadDelta = Format(delta / (i - colCounter), "0.00")
+            
+            ' FOR ANALYSIS - DELETE LATER
+            FileToWrite.WriteLine " tcw > y"
+            FileToWrite.WriteLine "i: " & CStr(i) & " - colCounter: " & CStr(colCounter) & " (i-colCounter): " & CStr(i - colCounter)
+            FileToWrite.WriteLine "**tcw: " & CStr(tcw)
+            FileToWrite.WriteLine "**Delta: " & CStr(delta)
+            FileToWrite.WriteLine "**spreadDelta: " & CStr(spreadDelta)
+            FileToWrite.WriteLine " ----------------------------------- "
+            ' FOR ANALYSIS - DELETE LATER
+            
+            adjustWidths strSubset, i - 1, spreadDelta
+            
+            strSubset = i
+            colCounter = i
+            tcw = 0#
+            delta = 0#
+            spreadDelta = 0#
+        End If
+    Next i
+    
+    FileToWrite.Close
+    
+    Debug.Print "####"
 
 End Sub
 
-Private Sub findWdith(ws, start, limit)
+Private Sub adjustWidths(colStart As Integer, colEnd As Integer, delta As Double)
+    Debug.Print " Method - adjustWidths"
     
-    Dim c As Range
-    Dim str As String
-    Dim T As Double
-    T = 0
+    Dim iter As Long
+    Dim newWidth As Double
     
-    str = start + ":" + limit
-    Debug.Print str
-        
-    For Each c In Range(str).Columns
-        T = T + c.ColumnWidth
-        'Debug.Print c.ColumnWidth
-    Next
-    Debug.Print T
+    
+    For i = colStart To colEnd
+        ' NEWWIDTH IS IN POINTS
+         newWidth = Columns(i).Width + delta
+        'SETTING WIDTHS IN POINTS
+        For iter = 1 To 5
+            Columns(i).ColumnWidth = newWidth / Columns(i).Width * Columns(i).ColumnWidth
+            ' Columns(i).ColumnWidth = Format(Columns(i).Width / Application.InchesToPoints(1), "0.00") + delta
+        Next iter
+    Next i
+End Sub
 
+
+Private Sub setupPrintArea_RepCol(ws As Worksheet, startCol As String, limitCol As String)
+
+    Debug.Print " Method - setupPrintArea_RepCol"
+
+    Dim largestCell, cellRange, headerRange As String
+    Dim start, limit, lenHeader, lenCell As Integer
+    
+    start = Range((startCol + ":" + startCol)).Column
+    limit = Range((limitCol + ":" + limitCol)).Column
+
+    lenCell = 0
+        
+    'Loop through columns
+    For i = start To limit
+        headerRange = Split(Cells(1, i).address, "$")(1) & "1"
+        lenHeader = Len(Range(headerRange).text)
+        'Create the cell Range for each column starting from cell 2(taking out header cell)
+        cellRange = Split(Cells(1, i).address, "$")(1) & "2:" & Split(Cells(1, i).address, "$")(1) & CStr(lastRw(ws))
+        For Each C In Range(cellRange).Cells
+            If (Len(C.text) > lenCell) Then
+                lenCell = Len(C.text)
+                largestCell = C.address
+            End If
+        Next
+
+        'Compare header and cell length
+        If (lenHeader > lenCell) Then
+            'Arrange header width
+            Range(headerRange).Value = arrangeHeader(Range(headerRange).Value)
+        End If
+        'Autofit current column
+        Columns(Split(Cells(1, i).address, "$")(1)).AutoFit
+        'Reset lenCell for next Column
+        lenCell = 0
+    Next
 
 End Sub
 
