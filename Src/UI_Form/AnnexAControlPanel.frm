@@ -16,6 +16,16 @@ Attribute VB_Exposed = False
 'Global
 Private configFilesName As Collection
 
+Private Sub ConfigFilesButton_Click()
+
+    Dim configFilesLocation As String
+    configFilesLocation = "O:\31__Nuvo Programs\Excel_ConfigFiles\"
+    
+    'Open Folder location
+    Shell "C:\WINDOWS\explorer.exe """ & configFilesLocation & "", vbNormalFocus
+
+End Sub
+
 Private Sub UserForm_Initialize()
     
     Dim configFilesLocation, cfExtension As String
