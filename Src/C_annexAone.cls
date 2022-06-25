@@ -2,13 +2,19 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "annexAone"
+Attribute VB_Name = "C_annexAone"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 'Holds Annex A-1 Configuration
 Private annexA As New Dictionary
+Private anxMessages As New C_Messages
+
+Private Sub Class_Initialize()
+    'Set annexA = CreateObject("Scripting.Dictionary")
+End Sub
+
 
 'Get Page Configuration
 Public Sub readConfig(configPath As String)
@@ -33,20 +39,28 @@ End Property
 
 Public Sub setupAnnexPages(ws As Worksheet)
 
-    Debug.Print "WORKING MODE START"
+    'STORE MARCRO LOG/MESSAGE
+    anxMessages.set_message ("WORKING MODE START")
+    MsgBox anxMessages.get_messages
+    
     Call sectionPageSetup(ws, annexA("pagesetup"))
     Call sectionMarginsSetup(ws, annexA("marginsetup"))
     Call sectionHeaderFooterSetup(ws, annexA("headerfootersetup"))
     Call sectionRepeatRowColSetup(ws)
-    Call SectionPrintArea(ws)
-    Debug.Print "WORKING MODE END"
+    'Call SectionPrintArea(ws)
+    
+    'Debug.Print "WORKING MODE END"
+    anxMessages.set_message ("WORKING MODE END")
+    MsgBox anxMessages.get_messages
+    anxMessages.clear_messages
     
 
 End Sub
 
 Private Sub sectionPageSetup(ws As Worksheet, config As Dictionary)
     
-    Debug.Print "  SETTING UP PAGE"
+    'STORE MARCRO LOG/MESSAGE
+    anxMessages.set_message ("  SETTING UP PAGE")
     
     ' -- Orientation -- '
     ws.PageSetup.Orientation = config("orientation")
@@ -64,7 +78,8 @@ End Sub
 
 Private Sub sectionMarginsSetup(ws As Worksheet, config As Dictionary)
     
-    Debug.Print "  SETTING UP MARGIN"
+    'STORE MARCRO LOG/MESSAGE
+    anxMessages.set_message ("  SETTING UP MARGIN")
     
     ' -- Set Margins -- '
     ws.PageSetup.TopMargin = Application.InchesToPoints(config("top"))
@@ -80,7 +95,9 @@ End Sub
 
 Private Sub sectionHeaderFooterSetup(ws As Worksheet, config As Dictionary)
     
-    Debug.Print "  SETTING UP HEADER/FOOTER"
+    'STORE MARCRO LOG/MESSAGE
+    anxMessages.set_message ("  SETTING UP HEADER/FOOTER")
+    
     ' -- Set Margins -- '
     ws.PageSetup.HeaderMargin = Application.InchesToPoints(config("header"))
     ws.PageSetup.FooterMargin = Application.InchesToPoints(config("footer"))
@@ -101,7 +118,8 @@ End Sub
 
 Private Sub sectionRepeatRowColSetup(ws)
     
-    Debug.Print "  SETTING UP ROW/COLUMN REPEAT"
+    'STORE MARCRO LOG/MESSAGE
+    anxMessages.set_message ("  SETTING UP ROW/COLUMN REPEAT")
     
     'Check if Panes are frozen
     If ActiveWindow.FreezePanes = False Then
@@ -130,7 +148,8 @@ End Sub
 
 Private Sub SectionPrintArea(ws As Worksheet)
 
-   Debug.Print " Method - setupPrintArea"
+    'STORE MARCRO LOG/MESSAGE
+    Debug.Print " Method - setupPrintArea"
     
     Dim RepCols_width As Double
     Dim dimensions As New Dictionary
@@ -162,15 +181,16 @@ End Sub
 
 Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String, y As Double)
     
+    'STORE MARCRO LOG/MESSAGE
     Debug.Print "####"
     Debug.Print " Method - setupPrintArea_DynCol"
     
     ' FOR ANALYSIS - DELETE LATER
-    Dim fname As String
-    fname = "C:\Users\jairo\Desktop\Me\ExcelMacro\LiveRepo\Excel-Tools\Src\Analysis\" & Format(Now, "dd-mm-yyyy-hh-mm-ss") & ".txt"
-    Dim FSO As New FileSystemObject
-    Set FSO = CreateObject("Scripting.FileSystemObject")
-    Set FileToWrite = FSO.CreateTextFile(fname, ForWriting)
+''    Dim fname As String
+''    fname = "C:\Users\jairo\Desktop\Me\ExcelMacro\LiveRepo\Excel-Tools\Src\Analysis\" & Format(Now, "dd-mm-yyyy-hh-mm-ss") & ".txt"
+''    Dim FSO As New FileSystemObject
+''    Set FSO = CreateObject("Scripting.FileSystemObject")
+''    Set FileToWrite = FSO.CreateTextFile(fname, ForWriting)
     ' FOR ANALYSIS - DELETE LATER
     
     
@@ -190,9 +210,9 @@ Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String,
     Debug.Print "END: "; lmt
     
     ' FOR ANALYSIS - DELETE LATER
-    FileToWrite.WriteLine "START OF setupPrintArea_DynCol"
-    FileToWrite.WriteLine "STRAT: " & start
-    FileToWrite.WriteLine "END: " & lmt
+''    FileToWrite.WriteLine "START OF setupPrintArea_DynCol"
+''    FileToWrite.WriteLine "STRAT: " & start
+''    FileToWrite.WriteLine "END: " & lmt
     ' FOR ANALYSIS - DELETE LATER
 
     For i = start To lmt
@@ -207,7 +227,7 @@ Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String,
         tcw = tcw + cw
         
         ' FOR ANALYSIS - DELETE LATER
-        FileToWrite.WriteLine Columns(i).address & " | Widht: " & CStr(cw) & " | Total wc: " & CStr(tcw) & " | Length: " & CStr(y)
+''        FileToWrite.WriteLine Columns(i).address & " | Widht: " & CStr(cw) & " | Total wc: " & CStr(tcw) & " | Length: " & CStr(y)
         ' FOR ANALYSIS - DELETE LATER
         
         If tcw > y Then
@@ -216,12 +236,12 @@ Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String,
             spreadDelta = Format(delta / (i - colCounter), "0.00")
             
             ' FOR ANALYSIS - DELETE LATER
-            FileToWrite.WriteLine " tcw > y"
-            FileToWrite.WriteLine "i: " & CStr(i) & " - colCounter: " & CStr(colCounter) & " (i-colCounter): " & CStr(i - colCounter)
-            FileToWrite.WriteLine "**tcw: " & CStr(tcw)
-            FileToWrite.WriteLine "**Delta: " & CStr(delta)
-            FileToWrite.WriteLine "**spreadDelta: " & CStr(spreadDelta)
-            FileToWrite.WriteLine " ----------------------------------- "
+''            FileToWrite.WriteLine " tcw > y"
+''            FileToWrite.WriteLine "i: " & CStr(i) & " - colCounter: " & CStr(colCounter) & " (i-colCounter): " & CStr(i - colCounter)
+''            FileToWrite.WriteLine "**tcw: " & CStr(tcw)
+''            FileToWrite.WriteLine "**Delta: " & CStr(delta)
+''            FileToWrite.WriteLine "**spreadDelta: " & CStr(spreadDelta)
+''            FileToWrite.WriteLine " ----------------------------------- "
             ' FOR ANALYSIS - DELETE LATER
             
             adjustWidths strSubset, i - 1, spreadDelta
@@ -241,6 +261,7 @@ Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String,
 End Sub
 
 Private Sub adjustWidths(colStart As Integer, colEnd As Integer, delta As Double)
+    'STORE MARCRO LOG/MESSAGED
     Debug.Print " Method - adjustWidths"
     
     Dim iter As Long
@@ -261,6 +282,7 @@ End Sub
 
 Private Sub setupPrintArea_RepCol(ws As Worksheet, startCol As String, limitCol As String)
 
+    'STORE MARCRO LOG/MESSAGE
     Debug.Print " Method - setupPrintArea_RepCol"
 
     Dim largestCell, cellRange, headerRange As String
@@ -299,6 +321,8 @@ End Sub
 
 
 Public Sub printConfig()
+    'STORE MARCRO LOG/MESSAGE
+    anxMessages.set_message ("Printing Annex A setup")
     printHashT annexA
 
 End Sub
@@ -319,12 +343,5 @@ Private Sub printHashT(dict As Dictionary, Optional ByVal level = 0)
         End If
     Next
         
-End Sub
-
-
-
-Private Sub Class_Initialize()
-    'Set annexA = CreateObject("Scripting.Dictionary")
-    
 End Sub
 
