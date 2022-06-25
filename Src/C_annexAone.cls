@@ -41,7 +41,7 @@ Public Sub setupAnnexPages(ws As Worksheet)
 
     'STORE MARCRO LOG/MESSAGE
     anxMessages.set_message ("WORKING MODE START")
-    MsgBox anxMessages.get_messages
+    'MsgBox anxMessages.get_messages
     
     Call sectionPageSetup(ws, annexA("pagesetup"))
     Call sectionMarginsSetup(ws, annexA("marginsetup"))
@@ -51,9 +51,7 @@ Public Sub setupAnnexPages(ws As Worksheet)
     
     'Debug.Print "WORKING MODE END"
     anxMessages.set_message ("WORKING MODE END")
-    MsgBox anxMessages.get_messages
-    anxMessages.clear_messages
-    
+    'MsgBox anxMessages.get_messages
 
 End Sub
 
@@ -345,3 +343,7 @@ Private Sub printHashT(dict As Dictionary, Optional ByVal level = 0)
         
 End Sub
 
+Public Function printLogs() As String
+    printLogs = anxMessages.get_messages
+    anxMessages.clear_messages
+End Function
