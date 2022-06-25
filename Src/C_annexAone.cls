@@ -39,9 +39,8 @@ End Property
 
 Public Sub setupAnnexPages(ws As Worksheet)
 
-    'STORE MARCRO LOG/MESSAGE
+    'STORE MARCRO LOGS/MESSAGES
     anxMessages.set_message ("WORKING MODE START")
-    'MsgBox anxMessages.get_messages
     
     Call sectionPageSetup(ws, annexA("pagesetup"))
     Call sectionMarginsSetup(ws, annexA("marginsetup"))
@@ -49,15 +48,14 @@ Public Sub setupAnnexPages(ws As Worksheet)
     Call sectionRepeatRowColSetup(ws)
     'Call SectionPrintArea(ws)
     
-    'Debug.Print "WORKING MODE END"
+    'STORE MARCRO LOGS/MESSAGES
     anxMessages.set_message ("WORKING MODE END")
-    'MsgBox anxMessages.get_messages
-
+    
 End Sub
 
 Private Sub sectionPageSetup(ws As Worksheet, config As Dictionary)
     
-    'STORE MARCRO LOG/MESSAGE
+    'STORE MARCRO LOGS/MESSAGES
     anxMessages.set_message ("  SETTING UP PAGE")
     
     ' -- Orientation -- '
@@ -76,7 +74,7 @@ End Sub
 
 Private Sub sectionMarginsSetup(ws As Worksheet, config As Dictionary)
     
-    'STORE MARCRO LOG/MESSAGE
+    'STORE MARCRO LOGS/MESSAGES
     anxMessages.set_message ("  SETTING UP MARGIN")
     
     ' -- Set Margins -- '
@@ -93,7 +91,7 @@ End Sub
 
 Private Sub sectionHeaderFooterSetup(ws As Worksheet, config As Dictionary)
     
-    'STORE MARCRO LOG/MESSAGE
+    'STORE MARCRO LOGS/MESSAGES
     anxMessages.set_message ("  SETTING UP HEADER/FOOTER")
     
     ' -- Set Margins -- '
@@ -116,7 +114,7 @@ End Sub
 
 Private Sub sectionRepeatRowColSetup(ws)
     
-    'STORE MARCRO LOG/MESSAGE
+    'STORE MARCRO LOGS/MESSAGES
     anxMessages.set_message ("  SETTING UP ROW/COLUMN REPEAT")
     
     'Check if Panes are frozen
@@ -146,8 +144,8 @@ End Sub
 
 Private Sub SectionPrintArea(ws As Worksheet)
 
-    'STORE MARCRO LOG/MESSAGE
-    Debug.Print " Method - setupPrintArea"
+    'STORE MARCRO LOGS/MESSAGES
+    anxMessages.set_message (" Method - setupPrintArea")
     
     Dim RepCols_width As Double
     Dim dimensions As New Dictionary
@@ -179,9 +177,9 @@ End Sub
 
 Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String, y As Double)
     
-    'STORE MARCRO LOG/MESSAGE
-    Debug.Print "####"
-    Debug.Print " Method - setupPrintArea_DynCol"
+    'STORE MARCRO LOGS/MESSAGES
+    anxMessages.set_message ("####")
+    anxMessages.set_message (" Method - setupPrintArea_DynCol")
     
     ' FOR ANALYSIS - DELETE LATER
 ''    Dim fname As String
@@ -204,8 +202,8 @@ Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String,
     colCounter = start
     strSubset = start
     
-    Debug.Print "START: "; start
-    Debug.Print "END: "; lmt
+    Debug.Print "COL NUM START: "; start
+    Debug.Print "COL NUM END: "; lmt
     
     ' FOR ANALYSIS - DELETE LATER
 ''    FileToWrite.WriteLine "START OF setupPrintArea_DynCol"
@@ -254,13 +252,14 @@ Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String,
     
     FileToWrite.Close
     
-    Debug.Print "####"
+    'STORE MARCRO LOGS/MESSAGES
+    anxMessages.set_message ("####")
 
 End Sub
 
 Private Sub adjustWidths(colStart As Integer, colEnd As Integer, delta As Double)
-    'STORE MARCRO LOG/MESSAGED
-    Debug.Print " Method - adjustWidths"
+    'STORE MARCRO LOGS/MESSAGES
+    anxMessages.set_message (" Method - adjustWidths")
     
     Dim iter As Long
     Dim newWidth As Double
@@ -280,8 +279,9 @@ End Sub
 
 Private Sub setupPrintArea_RepCol(ws As Worksheet, startCol As String, limitCol As String)
 
-    'STORE MARCRO LOG/MESSAGE
-    Debug.Print " Method - setupPrintArea_RepCol"
+    'STORE MARCRO LOGS/MESSAGES
+    anxMessages.set_message (" Method - setupPrintArea_RepCol")
+    
 
     Dim largestCell, cellRange, headerRange As String
     Dim start, limit, lenHeader, lenCell As Integer
@@ -319,8 +319,9 @@ End Sub
 
 
 Public Sub printConfig()
-    'STORE MARCRO LOG/MESSAGE
+    'STORE MARCRO LOGS/MESSAGES
     anxMessages.set_message ("Printing Annex A setup")
+    
     printHashT annexA
 
 End Sub
