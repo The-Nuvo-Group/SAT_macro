@@ -28,6 +28,14 @@ Private Sub ConfigFilesButton_Click()
 
 End Sub
 
+Private Sub set_programLogRunTB2(msg As String)
+    programLogRunTB2.WordWrap = False
+    programLogRunTB2.MultiLine = True
+    programLogRunTB2.ScrollBars = 3
+    
+    programLogRunTB2.Value = msg
+End Sub
+
 Private Sub UserForm_Initialize()
     
     Dim configFilesLocation, cfExtension As String
@@ -46,7 +54,7 @@ End Sub
 
 Private Sub BtnRunAnnexAMacro_Click()
 
-    Dim Annex As New annexAone
+    Dim Annex As New C_annexAone
     Dim Px As New PixelRatio
     
     Dim ws As Worksheet
@@ -57,5 +65,9 @@ Private Sub BtnRunAnnexAMacro_Click()
     
     'Run Annex A-1 procedure
     Annex.setupAnnexPages ws
+    
+    'Populate TextBox
+    set_programLogRunTB2 (Annex.printLogs)
+    
 
 End Sub
