@@ -1,15 +1,47 @@
-<center><h1>SHEET ADJUSTMENT TOOL (SAT)</h1></center>
+<h1><center>SHEET ADJUSTMENT TOOL (SAT)</center></h1>
 
 <p align="center">
-<img src="https://github.com/The-Nuvo-Group/Excel-Tools/blob/version1/img/SAT.PNG" alt="Sheet Adjustment Tool - UI Picture">
+<img src="https://github.com/The-Nuvo-Group/Excel-Tools/blob/version1/img/SAT.PNG" alt="Sheet Adjustment Tool - UI Picture" width="350" height="350"> 
 </p>
 
 [![GitHub issues](https://img.shields.io/github/issues/The-Nuvo-Group/Excel-Tools)](https://github.com/The-Nuvo-Group/Excel-Tools/issues)
 [![GitHub license](https://img.shields.io/github/license/The-Nuvo-Group/Excel-Tools)](https://github.com/The-Nuvo-Group/Excel-Tools/blob/main/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/The-Nuvo-Group/Excel-Tools)](https://github.com/The-Nuvo-Group/Excel-Tools/stargazers)
+![version 1.0.0](https://img.shields.io/badge/Version-1.0.0-blue)
 
-### ABOUT
-SAT is an **Excel Macro** that structures Worksheets for ***Pretty Printing***.
+<h2>ABOUT</h2>
 
-It runs on a user interface upon which it loads pre-existent   confugration files that determine the settings to apply.
+<p>
+SAT is an <strong>Excel Macro</strong> that structures Worksheets for <strong><em>Pretty Printing</em></strong>.<br>
+
+It runs on a user interface upon which it loads pre-existent   configuration files that determine the settings to apply.<br>
 
 It helps by adjusting column widths automatically based on the scale(zoom) provided on the config file and the respective data of each column.
+</p>
+
+<h2>INSTALLATION</h2>
+
+<h4>Automatic - Recommended</h4>
+<ul>
+    <li>TO DO</li>
+</ul>
+
+<h4>Manual</h4>
+<ul>
+    <li>TO DO</li>
+</ul>
+
+<h2>SET UP</h2>
+<ul>
+    <li>TO DO</li>
+</ul>
+
+<h2>HOW TO USE</h2>
+<ul>
+    <li>TO DO</li>
+</ul>
+
+
+
+
+
