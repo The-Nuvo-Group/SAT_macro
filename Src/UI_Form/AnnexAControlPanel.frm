@@ -66,6 +66,9 @@ Private Sub BtnRunAnnexAMacro_Click()
     'Run Annex A-1 procedure
     Annex.setupAnnexPages ws
     
+    'Set view to "Page Break Preview"
+    ActiveWindow.View = xlPageBreakPreview
+    
     'Populate TextBox
     set_programLogRunTB2 (Annex.printLogs)
     
