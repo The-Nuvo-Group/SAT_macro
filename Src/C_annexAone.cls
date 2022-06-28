@@ -51,6 +51,9 @@ Public Sub setupAnnexPages(ws As Worksheet)
     'STORE MARCRO LOGS/MESSAGES
     anxMessages.set_message ("WORKING MODE END")
     
+    tmp = MsgBox("All done, you can close the Form now.", vbInformation)
+    
+    
 End Sub
 
 Private Sub sectionPageSetup(ws As Worksheet, config As Dictionary)
