@@ -46,7 +46,7 @@ Public Sub setupAnnexPages(ws As Worksheet)
     Call sectionMarginsSetup(ws, annexA("marginsetup"))
     Call sectionHeaderFooterSetup(ws, annexA("headerfootersetup"))
     Call sectionRepeatRowColSetup(ws)
-    'Call SectionPrintArea(ws)
+    Call SectionPrintArea(ws)
     
     'STORE MARCRO LOGS/MESSAGES
     anxMessages.set_message ("WORKING MODE END")
@@ -145,13 +145,17 @@ End Sub
 Private Sub SectionPrintArea(ws As Worksheet)
 
     'STORE MARCRO LOGS/MESSAGES
-    anxMessages.set_message (" Method - setupPrintArea")
+    anxMessages.set_message ("  SETTING UP PRINT PREVIEW AREA")
+    anxMessages.set_message ("      ***")
     
     Dim RepCols_width As Double
     Dim dimensions As New Dictionary
     
     'AutoFit all columns and rows in Annex A
+    anxMessages.set_message ("      AutoFit Columns")
     Columns(GenerateColRowTitleRange(lastCl(ws), "Col")).AutoFit
+    
+    anxMessages.set_message ("      AutoFit Rows")
     Rows(GenerateColRowTitleRange(CStr(lastRw(ws)), "Row")).AutoFit
     
     'Set up Reparing columns
@@ -163,6 +167,7 @@ Private Sub SectionPrintArea(ws As Worksheet)
     '   Repeating Columns,
     '   Repeating Columns with left & right annexes borders, and
     '   Dynamic Columns
+    anxMessages.set_message ("      Calculate Dynamic Columns Area")
     RepCols_width = CDbl(Format(Range(GenerateColRowTitleRange(annexA("repeating").item("Col"), "Col")).Width / Application.InchesToPoints(1), "0.00"))
     dimensions.Add "repCols", scaleDown(RepCols_width, CDbl(annexA("pagesetup")("scaling")))
     'dimensions.Add "repCols", RepCols_width
@@ -173,13 +178,14 @@ Private Sub SectionPrintArea(ws As Worksheet)
     'Set up Dynamic columns
     setupPrintArea_DynCol ws, annexA("repeating")("Col"), dimensions("dynCols")
     
+    anxMessages.set_message ("      ***")
+    
 End Sub
 
 Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String, y As Double)
     
     'STORE MARCRO LOGS/MESSAGES
-    anxMessages.set_message ("####")
-    anxMessages.set_message (" Method - setupPrintArea_DynCol")
+    anxMessages.set_message ("      Method - PrintAra Dynamic Columns")
     
     ' FOR ANALYSIS - DELETE LATER
 ''    Dim fname As String
@@ -250,16 +256,13 @@ Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String,
         End If
     Next i
     
-    FileToWrite.Close
-    
-    'STORE MARCRO LOGS/MESSAGES
-    anxMessages.set_message ("####")
+    'FileToWrite.Close
 
 End Sub
 
 Private Sub adjustWidths(colStart As Integer, colEnd As Integer, delta As Double)
     'STORE MARCRO LOGS/MESSAGES
-    anxMessages.set_message (" Method - adjustWidths")
+    anxMessages.set_message ("          Method - Adjust Widths")
     
     Dim iter As Long
     Dim newWidth As Double
@@ -280,7 +283,7 @@ End Sub
 Private Sub setupPrintArea_RepCol(ws As Worksheet, startCol As String, limitCol As String)
 
     'STORE MARCRO LOGS/MESSAGES
-    anxMessages.set_message (" Method - setupPrintArea_RepCol")
+    anxMessages.set_message ("      Method - PrintAra Repeating Columns")
     
 
     Dim largestCell, cellRange, headerRange As String
