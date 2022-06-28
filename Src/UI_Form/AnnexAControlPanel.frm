@@ -1,10 +1,10 @@
 VERSION 5.00
 Begin {C62A69F0-16DC-11CE-9E98-00AA00574A4F} AnnexAControlPanel 
    Caption         =   "Annnex A-1 Control"
-   ClientHeight    =   8535.001
+   ClientHeight    =   6570
    ClientLeft      =   120
    ClientTop       =   465
-   ClientWidth     =   11220
+   ClientWidth     =   6360
    OleObjectBlob   =   "AnnexAControlPanel.frx":0000
    StartUpPosition =   1  'CenterOwner
 End
@@ -13,6 +13,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
+
 'Global
 Private configFilesName As Collection
 
@@ -24,6 +26,14 @@ Private Sub ConfigFilesButton_Click()
     'Open Folder location
     Shell "C:\WINDOWS\explorer.exe """ & configFilesLocation & "", vbNormalFocus
 
+End Sub
+
+Private Sub set_programLogRunTB2(msg As String)
+    programLogRunTB2.WordWrap = False
+    programLogRunTB2.MultiLine = True
+    programLogRunTB2.ScrollBars = 3
+    
+    programLogRunTB2.Value = msg
 End Sub
 
 Private Sub UserForm_Initialize()
@@ -44,19 +54,23 @@ End Sub
 
 Private Sub BtnRunAnnexAMacro_Click()
 
-    Dim Annex As New annexAone
+    Dim Annex As New C_annexAone
     Dim Px As New PixelRatio
-    
     
     Dim ws As Worksheet
     Set ws = Worksheets(ActiveSheet.Index)
-    'ws.Activate
     
     'Get the PATH of the configFile the user selected from the dropdown menu
     Annex.readConfig CStr(configFilesName(2)(ConfigFilesMenu.ListIndex))
     
-    'Annex.setupAnnexPages ws
+    'Run Annex A-1 procedure
+    Annex.setupAnnexPages ws
     
-    Annex.printConfig
+    'Set view to "Page Break Preview"
+    ActiveWindow.View = xlPageBreakPreview
+    
+    'Populate TextBox
+    set_programLogRunTB2 (Annex.printLogs)
+    
 
 End Sub
