@@ -5,15 +5,12 @@
     return $pre+$pcUser+$post
 }
 
+$xlsbFiles = (Get-ChildItem -Path ".\" -Filter "*.XLSB").FullName 
+
 $pcUser = $([System.Environment]::UserName)
 
 $XLSTARTPath =  getXLSTARTpath($pcUser)
 
-$currentLocation = [string](Get-Location)
-
-$fileName = "ANNEXA1- V1 ALPHA.XLSB"
-
-$target = $currentLocation+"\"+$fileName
 
 Write-Host
 Write-Host "------------------------------------"
@@ -21,13 +18,19 @@ Write-Host
 Write-Host "Setting up SAT"
 Write-Host
 Write-Host "User: " $pcUser
-Write-Host "Target: '$fileName' "
+Write-Host "Targets:"
+foreach($i in (Get-ChildItem -Path ".\" -Filter "*.XLSB").Name)
+{
+Write-Host "`t-> "$i
+}
 Write-Host "Destination: " $XLSTARTPath
 Write-Host
 Write-Host "------------------------------------"
 Write-Host
 
-Move-Item -Path $target -Destination $XLSTARTPath
+Foreach($i in $xlsbFiles){
+    Move-Item -Path $i -Destination $XLSTARTPath
+}
 
 dir $XLSTARTPath
 
