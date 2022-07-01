@@ -13,8 +13,11 @@
 
 <p>
 SAT, or Sheet Adjustment Tools, is an Excel Macro that structures Worksheets for Pretty Printing.<br>
+    
 It runs on a user interface upon which it loads pre-existing configuration files that determine the settings to apply.<br>
+    
 It helps by adjusting column widths automatically, based on the scale (zoom) provided on the configuration settings and the respective data lengths of each column.<br>
+    
 SAT will need the help of an additional tool (macro) named “Header_Unifier” if certain conditions in the Excel sheet are not met.<br>
 </p>
 
