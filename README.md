@@ -1,7 +1,7 @@
 <h1><center>SHEET ADJUSTMENT TOOL (SAT)</center></h1>
 
 <p align="center">
-<img src="https://github.com/The-Nuvo-Group/Excel-Tools/blob/version1/img/SAT.PNG" alt="Sheet Adjustment Tool - UI Picture" width="350" height="350"> 
+<img src="https://github.com/The-Nuvo-Group/Excel-Tools/blob/main/img/SAT.PNG" alt="Sheet Adjustment Tool - UI Picture" width="350" height="350"> 
 </p>
 
 [![GitHub issues](https://img.shields.io/github/issues/The-Nuvo-Group/Excel-Tools)](https://github.com/The-Nuvo-Group/Excel-Tools/issues)
