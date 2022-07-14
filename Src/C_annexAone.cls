@@ -7,13 +7,25 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'Holds Annex A-1 Configuration
+'Class config objects,variables
 Private annexA As New Dictionary
 Private anxMessages As New C_Messages
+Private arrangeHeadersFlag As Integer
+
 
 Private Sub Class_Initialize()
     'Set annexA = CreateObject("Scripting.Dictionary")
 End Sub
+
+'Set AH Flag
+Public Function setArrangeHeadersFlag(flg As Integer)
+    arrangeHeadersFlag = flg
+End Function
+
+'Get AH Flag
+Public Function getArrangeHeadersFlag()
+    getArrangeHeadersFlag = arrangeHeadersFlag
+End Function
 
 
 'Get Page Configuration
@@ -183,6 +195,9 @@ Private Sub SectionPrintArea(ws As Worksheet)
     
     anxMessages.set_message ("      ***")
     
+    'Activate AH Flag now tht data-headers have been arrange.
+    arrangeHeadersFlag = 1
+    
 End Sub
 
 Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String, y As Double)
@@ -311,7 +326,7 @@ Private Sub setupPrintArea_RepCol(ws As Worksheet, startCol As String, limitCol 
         Next
 
         'Compare header and cell length
-        If (lenHeader > lenCell) Then
+        If (arrangeHeadersFlag = 0 And lenHeader > lenCell) Then
             'Arrange header width
             Range(headerRange).Value = arrangeHeader(Range(headerRange).Value)
         End If
