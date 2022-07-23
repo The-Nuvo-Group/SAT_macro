@@ -20,6 +20,8 @@ End Sub
 'Set AH Flag
 Public Function setArrangeHeadersFlag(flg As Integer)
     arrangeHeadersFlag = flg
+    
+    anxMessages.set_message ("Arrange Headers Flag set to 1")
 End Function
 
 'Get AH Flag
@@ -196,7 +198,7 @@ Private Sub SectionPrintArea(ws As Worksheet)
     anxMessages.set_message ("      ***")
     
     'Activate AH Flag now tht data-headers have been arrange.
-    arrangeHeadersFlag = 1
+    setArrangeHeadersFlag (1)
     
 End Sub
 
@@ -225,9 +227,6 @@ Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String,
     tcw = 0#
     colCounter = start
     strSubset = start
-    
-    Debug.Print "COL NUM START: "; start
-    Debug.Print "COL NUM END: "; lmt
     
     ' FOR ANALYSIS - DELETE LATER
 ''    FileToWrite.WriteLine "START OF setupPrintArea_DynCol"
