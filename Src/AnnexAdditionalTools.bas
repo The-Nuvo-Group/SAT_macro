@@ -36,29 +36,39 @@ Function arrangeHeader(header As String) As String
     Dim largest, lrgIndx, i As Integer
     Dim arrayofword() As String
     
+    'If there are any "soft-enters" replace them with a space.
+    header = Replace(header, Chr(10), " ")
     'Split string by spaces
     arrayofwords = Split(header)
-    
-    lrgIndx = indexLargestWord(arrayofwords)
-    
-    'Re-arrange words to fit size
-    tmpWord = ""
-    For i = LBound(arrayofwords) To UBound(arrayofwords)
-        If (Len(tmpWord) + Len(arrayofwords(i))) <= Len(arrayofwords(lrgIndx)) Then
-            If Len(tmpWord) = 0 Then
-                tmpWord = arrayofwords(i)
+
+    'If the array has more than 1 element
+    If UBound(arrayofwords) > 0 Then
+        Debug.Print "arrayofWord > 0" + " # " + CStr(UBound(arrayofwords)) + " -> " + header
+        lrgIndx = indexLargestWord(arrayofwords)
+        
+        'Re-arrange words to fit size
+        tmpWord = ""
+        For i = LBound(arrayofwords) To UBound(arrayofwords)
+            If (Len(tmpWord) + Len(arrayofwords(i))) <= Len(arrayofwords(lrgIndx)) Then
+                If Len(tmpWord) = 0 Then
+                    tmpWord = arrayofwords(i)
+                Else
+                    tmpWord = tmpWord + " " + arrayofwords(i)
+                End If
             Else
-                tmpWord = tmpWord + " " + arrayofwords(i)
+                finalHeader = finalHeader + tmpWord + Chr(10)
+                tmpWord = arrayofwords(i)
+                'Check if we are at the end of array
+                If (i = UBound(arrayofwords)) Then
+                    finalHeader = finalHeader + arrayofwords(i)
+                End If
             End If
-        Else
-            finalHeader = finalHeader + tmpWord + Chr(10)
-            tmpWord = arrayofwords(i)
-            'Check if we are at the end of array
-            If (i = UBound(arrayofwords)) Then
-                finalHeader = finalHeader + arrayofwords(i)
-            End If
-        End If
-    Next i
+        Next i
+    'If the array has only 1 element
+    Else
+        Debug.Print "arrayofWord = 0" + " # " + CStr(UBound(arrayofwords)) + " -> " + header
+        finalHeader = header
+    End If
     
     arrangeHeader = finalHeader
 
