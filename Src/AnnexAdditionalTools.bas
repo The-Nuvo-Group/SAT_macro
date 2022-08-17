@@ -36,35 +36,42 @@ Function arrangeHeader(header As String) As String
     Dim largest, lrgIndx, i As Integer
     Dim arrayofword() As String
     
+    'If there are any "soft-enters" replace them with a space.
+    header = Replace(header, Chr(10), " ")
     'Split string by spaces
     arrayofwords = Split(header)
+
+    'If the array has more than 1 element
+    If UBound(arrayofwords) > 0 Then
     
-    lrgIndx = indexLargestWord(arrayofwords)
-    
-    'Re-arrange words to fit size
-    tmpWord = ""
-    For i = LBound(arrayofwords) To UBound(arrayofwords)
-        If (Len(tmpWord) + Len(arrayofwords(i))) <= Len(arrayofwords(lrgIndx)) Then
-            If Len(tmpWord) = 0 Then
-                tmpWord = arrayofwords(i)
+        lrgIndx = indexLargestWord(arrayofwords)
+        
+        'Re-arrange words to fit size
+        tmpWord = ""
+        For i = LBound(arrayofwords) To UBound(arrayofwords)
+            'Check words len limit and loop
+            If (Len(tmpWord) + Len(arrayofwords(i))) <= Len(arrayofwords(lrgIndx)) Then
+                If Len(tmpWord) = 0 Then
+                    tmpWord = arrayofwords(i)
+                Else
+                    tmpWord = tmpWord + " " + arrayofwords(i)
+                End If
             Else
-                tmpWord = tmpWord + " " + arrayofwords(i)
+                'Word len limit has been reached, add to final header var & continue looping
+                finalHeader = finalHeader + tmpWord + Chr(10)
+                tmpWord = arrayofwords(i)
             End If
-        Else
-            finalHeader = finalHeader + tmpWord + Chr(10)
-            tmpWord = arrayofwords(i)
-            'Check if we are at the end of array
-            If (i = UBound(arrayofwords)) Then
-                finalHeader = finalHeader + arrayofwords(i)
-            End If
-        End If
-    Next i
+        Next
+        
+        'Remaining words added to the final header
+        finalHeader = finalHeader + tmpWord
+    
+    End If
     
     arrangeHeader = finalHeader
 
 End Function
 
-'Arrange headers in a "saquare" like structure
 'Input: String, cell address where range should start (e.g. "A1","X56, etc)
 '       String, cell address where range should end (e.g. "A1","X56, etc)
 '       String, string to be looked in range provided
