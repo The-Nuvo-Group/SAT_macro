@@ -167,7 +167,7 @@ Private Sub SectionPrintArea(ws As Worksheet)
     Dim dimensions As New Dictionary
     
     'Wrap Text in the entire Doc
-    anxMessage.set_message ("       Wrapping off/on Text")
+    anxMessages.set_message ("      Wrapping off/on Text")
     Range(GenerateColRowTitleRange(lastCl(ws), "Col")).WrapText = False
     Range(GenerateColRowTitleRange(lastCl(ws), "Col")).WrapText = True
     
