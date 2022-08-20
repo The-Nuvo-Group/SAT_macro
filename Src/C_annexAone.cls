@@ -12,7 +12,6 @@ Private annexA As New Dictionary
 Private anxMessages As New C_Messages
 Private arrangeHeadersFlag As Integer
 
-
 Private Sub Class_Initialize()
     'Set annexA = CreateObject("Scripting.Dictionary")
 End Sub
@@ -28,7 +27,6 @@ End Function
 Public Function getArrangeHeadersFlag()
     getArrangeHeadersFlag = arrangeHeadersFlag
 End Function
-
 
 'Get Page Configuration
 Public Sub readConfig(configPath As String)
@@ -168,12 +166,19 @@ Private Sub SectionPrintArea(ws As Worksheet)
     Dim RepCols_width As Double
     Dim dimensions As New Dictionary
     
-    'AutoFit all columns and rows in Annex A
+    'Wrap Text in the entire Doc
+    anxMessage.set_message ("       Wrapping off/on Text")
+    Range(GenerateColRowTitleRange(lastCl(ws), "Col")).WrapText = False
+    Range(GenerateColRowTitleRange(lastCl(ws), "Col")).WrapText = True
+    
+    'AutoFit all columns in Annex A
     anxMessages.set_message ("      AutoFit Columns")
     Columns(GenerateColRowTitleRange(lastCl(ws), "Col")).AutoFit
     
+    'AutoFit all rows in Annex A
     anxMessages.set_message ("      AutoFit Rows")
     Rows(GenerateColRowTitleRange(CStr(lastRw(ws)), "Row")).AutoFit
+    
     
     'Set up Reparing columns
     'setupPrintArea_RepCol ws, "A", annexA("repeating").item("Col")
@@ -208,11 +213,11 @@ Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String,
     anxMessages.set_message ("      Method - PrintAra Dynamic Columns")
     
     ' FOR ANALYSIS - DELETE LATER
-''    Dim fname As String
-''    fname = "C:\Users\jairo\Desktop\Me\ExcelMacro\LiveRepo\Excel-Tools\Src\Analysis\" & Format(Now, "dd-mm-yyyy-hh-mm-ss") & ".txt"
-''    Dim FSO As New FileSystemObject
-''    Set FSO = CreateObject("Scripting.FileSystemObject")
-''    Set FileToWrite = FSO.CreateTextFile(fname, ForWriting)
+    ''    Dim fname As String
+    ''    fname = "C:\Users\jairo\Desktop\Me\ExcelMacro\LiveRepo\Excel-Tools\Src\Analysis\" & Format(Now, "dd-mm-yyyy-hh-mm-ss") & ".txt"
+    ''    Dim FSO As New FileSystemObject
+    ''    Set FSO = CreateObject("Scripting.FileSystemObject")
+    ''    Set FileToWrite = FSO.CreateTextFile(fname, ForWriting)
     ' FOR ANALYSIS - DELETE LATER
     
     
@@ -229,9 +234,9 @@ Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String,
     strSubset = start
     
     ' FOR ANALYSIS - DELETE LATER
-''    FileToWrite.WriteLine "START OF setupPrintArea_DynCol"
-''    FileToWrite.WriteLine "STRAT: " & start
-''    FileToWrite.WriteLine "END: " & lmt
+    ''    FileToWrite.WriteLine "START OF setupPrintArea_DynCol"
+    ''    FileToWrite.WriteLine "STRAT: " & start
+    ''    FileToWrite.WriteLine "END: " & lmt
     ' FOR ANALYSIS - DELETE LATER
 
     For i = start To lmt
@@ -242,11 +247,11 @@ Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String,
         '   NEED TO REVISE: setupPrintArea_RepCol
         
         cw = Columns(i).Width / Application.InchesToPoints(1)
-        cw = scaleDown(cw, 51.05)   'CDbl(annexA("pagesetup")("scaling")))
+        cw = scaleDown(cw, 51.05)                'CDbl(annexA("pagesetup")("scaling")))
         tcw = tcw + cw
         
         ' FOR ANALYSIS - DELETE LATER
-''        FileToWrite.WriteLine Columns(i).address & " | Widht: " & CStr(cw) & " | Total wc: " & CStr(tcw) & " | Length: " & CStr(y)
+        ''        FileToWrite.WriteLine Columns(i).address & " | Widht: " & CStr(cw) & " | Total wc: " & CStr(tcw) & " | Length: " & CStr(y)
         ' FOR ANALYSIS - DELETE LATER
         
         If tcw > y Then
@@ -255,12 +260,12 @@ Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String,
             spreadDelta = Format(delta / (i - colCounter), "0.00")
             
             ' FOR ANALYSIS - DELETE LATER
-''            FileToWrite.WriteLine " tcw > y"
-''            FileToWrite.WriteLine "i: " & CStr(i) & " - colCounter: " & CStr(colCounter) & " (i-colCounter): " & CStr(i - colCounter)
-''            FileToWrite.WriteLine "**tcw: " & CStr(tcw)
-''            FileToWrite.WriteLine "**Delta: " & CStr(delta)
-''            FileToWrite.WriteLine "**spreadDelta: " & CStr(spreadDelta)
-''            FileToWrite.WriteLine " ----------------------------------- "
+            ''            FileToWrite.WriteLine " tcw > y"
+            ''            FileToWrite.WriteLine "i: " & CStr(i) & " - colCounter: " & CStr(colCounter) & " (i-colCounter): " & CStr(i - colCounter)
+            ''            FileToWrite.WriteLine "**tcw: " & CStr(tcw)
+            ''            FileToWrite.WriteLine "**Delta: " & CStr(delta)
+            ''            FileToWrite.WriteLine "**spreadDelta: " & CStr(spreadDelta)
+            ''            FileToWrite.WriteLine " ----------------------------------- "
             ' FOR ANALYSIS - DELETE LATER
             
             adjustWidths strSubset, i - 1, spreadDelta
@@ -287,7 +292,7 @@ Private Sub adjustWidths(colStart As Integer, colEnd As Integer, delta As Double
     
     For i = colStart To colEnd
         ' NEWWIDTH IS IN POINTS
-         newWidth = Columns(i).Width + delta
+        newWidth = Columns(i).Width + delta
         'SETTING WIDTHS IN POINTS
         For iter = 1 To 5
             Columns(i).ColumnWidth = newWidth / Columns(i).Width * Columns(i).ColumnWidth
@@ -295,7 +300,6 @@ Private Sub adjustWidths(colStart As Integer, colEnd As Integer, delta As Double
         Next iter
     Next i
 End Sub
-
 
 Private Sub setupPrintArea_RepCol(ws As Worksheet, startCol As String, limitCol As String)
 
@@ -337,7 +341,6 @@ Private Sub setupPrintArea_RepCol(ws As Worksheet, startCol As String, limitCol 
 
 End Sub
 
-
 Public Sub printConfig()
     'STORE MARCRO LOGS/MESSAGES
     anxMessages.set_message ("Printing Annex A setup")
@@ -352,7 +355,7 @@ Private Sub printHashT(dict As Dictionary, Optional ByVal level = 0)
     indent = Space(level)
     
     For Each k In dict.keys
-        If VarType(dict(k)) = 9 Then ' vbObject == 9
+        If VarType(dict(k)) = 9 Then             ' vbObject == 9
             Debug.Print indent; k; ":  "
             level = level + 1
             printHashT dict(k), level
@@ -368,3 +371,4 @@ Public Function printLogs() As String
     printLogs = anxMessages.get_messages
     anxMessages.clear_messages
 End Function
+
