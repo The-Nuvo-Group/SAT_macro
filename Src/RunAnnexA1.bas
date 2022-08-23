@@ -10,7 +10,7 @@ Sub Main()
     safeFail_configFiles configFilesLocation, cfExtension
 
     'Run user form
-    AnnexAControlPanel.Show
+    AnnexAControlPanel.Show vbModeless
              
 End Sub
 

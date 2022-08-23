@@ -168,7 +168,6 @@ Private Sub SectionPrintArea(ws As Worksheet)
     
     'Wrap Text in the entire Doc
     anxMessages.set_message ("      Wrapping off/on Text")
-    Range(GenerateColRowTitleRange(lastCl(ws), "Col")).WrapText = False
     Range(GenerateColRowTitleRange(lastCl(ws), "Col")).WrapText = True
     
     'AutoFit all columns in Annex A
