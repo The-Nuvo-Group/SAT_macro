@@ -7,27 +7,55 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+
 'Class config objects,variables
 Private annexA As New Dictionary
 Private anxMessages As New C_Messages
 Private arrangeHeadersFlag As Integer
 
+
+'************************************************************
+'Purpose: 	Constructor of the class
+'Input: 	Nothing
+'			Example: Class_Initialize()
+'Output: 	Nothing
+'************************************************************
 Private Sub Class_Initialize()
     'Set annexA = CreateObject("Scripting.Dictionary")
 End Sub
 
-'Set AH Flag
+
+'************************************************************
+'Purpose: 	Activates or deactivates the header flag.
+'Input: 	Integer, 1 or 0 indicating status of the flag.
+'			Example: setArrangeHeadersFlag()
+'Output: 	Nothing
+'************************************************************
 Public Function setArrangeHeadersFlag(flg As Integer)
     arrangeHeadersFlag = flg
     
     anxMessages.set_message ("Arrange Headers Flag set to 1")
 End Function
 
-'Get AH Flag
+
+'************************************************************
+'Purpose: 	Gets the status of the header flag.
+'Input: 	Nothing
+'			Example: getArrangeHeadersFlag()
+'Output: 	Integer, a 1 or 0 
+'			Example: 1
+'************************************************************
 Public Function getArrangeHeadersFlag()
     getArrangeHeadersFlag = arrangeHeadersFlag
 End Function
 
+
+'************************************************************
+'Purpose: 	Reads and stores JSON configuration file holding profiles.
+'Input: 	String, path to a JSON file
+'			Example: readConfig("C://PATH/TO/A/FILE")
+'Output: 	Nothing
+'************************************************************
 'Get Page Configuration
 Public Sub readConfig(configPath As String)
 
@@ -43,12 +71,28 @@ Public Sub readConfig(configPath As String)
 
 End Sub
 
+
+'************************************************************
+'Purpose: 	Retrives the value of key count in the Dict annexA.
+'Input: 	Nothing
+'			Example: getCount()
+'Output: 	Integer
+'			Example: 2
+'************************************************************
 Public Property Get getCount() As Integer
     
     getCount = annexA.Count
     
 End Property
 
+
+
+'************************************************************
+'Purpose: 	Calls subrutines that modify an excel sheet.
+'Input: 	Worksheet, active worksheet to be modify
+'			Example: setupAnnexPages(activeWorksheet)
+'Output: 	Nothing
+'************************************************************
 Public Sub setupAnnexPages(ws As Worksheet)
 
     'STORE MARCRO LOGS/MESSAGES
@@ -64,10 +108,16 @@ Public Sub setupAnnexPages(ws As Worksheet)
     anxMessages.set_message ("WORKING MODE END")
     
     tmp = MsgBox("All done, you can close the Form now.", vbInformation)
-    
-    
 End Sub
 
+
+'************************************************************
+'Purpose: 	Subrutine that sets an excel sheet's Page Setup Properties
+'Input: 	Worksheet, active worksheet to be modify
+'			Dictionary, dict with parameters to be set
+'			Example: sectionPageSetup(activeWorksheet, DictProperties)
+'Output: 	Nothing
+'************************************************************
 Private Sub sectionPageSetup(ws As Worksheet, config As Dictionary)
     
     'STORE MARCRO LOGS/MESSAGES
@@ -87,6 +137,14 @@ Private Sub sectionPageSetup(ws As Worksheet, config As Dictionary)
     
 End Sub
 
+
+'************************************************************
+'Purpose: 	Subrutine that sets an excel sheet's Margins
+'Input: 	Worksheet, active worksheet to be modify
+'			Dictionary, dict with parameters to be set
+'			Example: sectionMarginsSetup(activeWorksheet, DictProperties)
+'Output: 	Nothing
+'************************************************************
 Private Sub sectionMarginsSetup(ws As Worksheet, config As Dictionary)
     
     'STORE MARCRO LOGS/MESSAGES
@@ -104,6 +162,14 @@ Private Sub sectionMarginsSetup(ws As Worksheet, config As Dictionary)
     
 End Sub
 
+
+'************************************************************
+'Purpose: 	Subrutine that sets an excel sheet's Header & Footer Properties
+'Input: 	Worksheet, active worksheet to be modify
+'			Dictionary, dict with parameters to be set
+'			Example: sectionHeaderFooterSetup(activeWorksheet, DictProperties)
+'Output: 	Nothing
+'************************************************************
 Private Sub sectionHeaderFooterSetup(ws As Worksheet, config As Dictionary)
     
     'STORE MARCRO LOGS/MESSAGES
@@ -127,6 +193,13 @@ Private Sub sectionHeaderFooterSetup(ws As Worksheet, config As Dictionary)
 
 End Sub
 
+
+'************************************************************
+'Purpose: 	Subrutine that sets an excel sheet's Rows & Columns to be repeated.
+'Input: 	Worksheet, active worksheet to be modify
+'			Example: sectionRepeatRowColSetup(activeWorksheet)
+'Output: 	Nothing
+'************************************************************
 Private Sub sectionRepeatRowColSetup(ws)
     
     'STORE MARCRO LOGS/MESSAGES
@@ -157,6 +230,16 @@ Private Sub sectionRepeatRowColSetup(ws)
 
 End Sub
 
+
+'************************************************************
+'Purpose: 	Subrutine that prepares an excel sheet's to be
+'			ready for the creation of an Annex A. It does so by
+'			setting up the columns to be repeated and caculating 
+'			some off set values.
+'Input: 	Worksheet, active worksheet to be modify
+'			Example: SectionPrintArea(activeWorksheet)
+'Output: 	Nothing
+'************************************************************
 Private Sub SectionPrintArea(ws As Worksheet)
 
     'STORE MARCRO LOGS/MESSAGES
@@ -206,6 +289,15 @@ Private Sub SectionPrintArea(ws As Worksheet)
     
 End Sub
 
+
+'************************************************************
+'Purpose: 	Subrutine that arranges the dynamic columns of an Annex A.
+'Input: 	Worksheet, active worksheet to be modify
+'			String, column letter indication off set to start dynamic area.
+'			Double, parameter that guides the space left to place dynamic columns.
+'			Example: setupPrintArea_DynCol(activeWorksheet, "E", 8.25)
+'Output: 	Nothing
+'************************************************************
 Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String, y As Double)
     
     'STORE MARCRO LOGS/MESSAGES
@@ -281,6 +373,15 @@ Private Sub setupPrintArea_DynCol(ws As Worksheet, ByVal columnSetoff As String,
 
 End Sub
 
+
+'************************************************************
+'Purpose: 	Subrutine that calculates the widht of a dynamic Column 
+'Input: 	Integer, start of column position
+'			Integer, start of next column
+'			Double, difference between star and end of column
+'			Example: adjustWidths(102,120,18.0)
+'Output: 	Nothing
+'************************************************************
 Private Sub adjustWidths(colStart As Integer, colEnd As Integer, delta As Double)
     'STORE MARCRO LOGS/MESSAGES
     anxMessages.set_message ("          Method - Adjust Widths")
@@ -300,6 +401,15 @@ Private Sub adjustWidths(colStart As Integer, colEnd As Integer, delta As Double
     Next i
 End Sub
 
+
+'************************************************************
+'Purpose: 	Subrutine that sets the repeating Columns in an Annex A
+'Input: 	Worksheet, active worksheet to be modify
+'			String, column letter indication the start position
+'			String, column letter indication where repeation ends.
+'			Example: setupPrintArea_RepCol(activeWorksheet, "A","E")
+'Output: 	Nothing
+'************************************************************
 Private Sub setupPrintArea_RepCol(ws As Worksheet, startCol As String, limitCol As String)
 
     'STORE MARCRO LOGS/MESSAGES
@@ -340,6 +450,13 @@ Private Sub setupPrintArea_RepCol(ws As Worksheet, startCol As String, limitCol 
 
 End Sub
 
+
+'************************************************************
+'Purpose: 	Subrutine that initiates the printing of a dictionary
+'Input: 	Nothing
+'			Example: printConfig()
+'Output: 	Nothing
+'************************************************************
 Public Sub printConfig()
     'STORE MARCRO LOGS/MESSAGES
     anxMessages.set_message ("Printing Annex A setup")
@@ -348,7 +465,15 @@ Public Sub printConfig()
 
 End Sub
 
-'Traverses a HashTable in a recursive way
+
+'************************************************************
+'Purpose: 	Subrutine that traverses a HashTable recrusively 
+'			printing all of its key:value attributes.
+'Input: 	Dictionary, Hashtable to traverse
+'			Integer, level of deepness of the hashtable
+'			Example: printHashT({k:v}, 0)
+'Output: 	Nothing
+'************************************************************
 Private Sub printHashT(dict As Dictionary, Optional ByVal level = 0)
     Dim indent As String
     indent = Space(level)
@@ -366,6 +491,13 @@ Private Sub printHashT(dict As Dictionary, Optional ByVal level = 0)
         
 End Sub
 
+
+'************************************************************
+'Purpose: 	Method that prints messages added to the message class. 
+'Input: 	Nothing
+'			Example: printLogs()
+'Output: 	Nothing
+'************************************************************
 Public Function printLogs() As String
     printLogs = anxMessages.get_messages
     anxMessages.clear_messages

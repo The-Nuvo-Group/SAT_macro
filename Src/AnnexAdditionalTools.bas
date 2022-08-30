@@ -1,17 +1,26 @@
 Attribute VB_Name = "AnnexAdditionalTools"
-'Scale down Row hight or Columns width
-'Input: Long, width/hight of column/row
-'       Integer, ration by which scale down is perform
-'Output: Long, new width/hight
+'************************************************************
+'Purpose: 	Scales down (zoom in/out) Row hight or Columns width
+'Input: 	Double, width/hight of column/row
+'       	Integer, ration by which scale down is perform
+'			Example:scaleDown(120.34, 40)
+'Output: 	Long, new width/hight
+'			Example: 48.14
+'************************************************************
 Function scaleDown(ByVal rcWidth As Double, ByVal ratio As Double) As Double
     Dim percent As Double
     percent = ratio / 100
     scaleDown = Format(rcWidth * percent, "0.00")
 End Function
 
-'Find the largest word in an array of strings
-'Input: Array, an array of strings
-'Output: Integer, index of the largest word
+
+'************************************************************
+'Purpose: 	Find the largest word in an array of strings
+'Input: 	Array, an array of strings
+'			Example: indexLargestWord(['We','are',testing','this'])
+'Output: 	Integer, index of the largest word
+'			Example:  2
+'************************************************************
 Function indexLargestWord(ByRef arrayofwords As Variant) As Integer
     Dim IDX As Integer
     Dim tmpWord As String
@@ -27,9 +36,16 @@ Function indexLargestWord(ByRef arrayofwords As Variant) As Integer
     indexLargestWord = IDX
 End Function
 
-'Arrange headers in a "saquare" like structure
-'Input: String, a header in string format
-'Output: String, same header but new-lines and spaces
+
+'************************************************************
+'Purpose: 	Arrange headers in a "saquare" like structure
+'Input: 	Input: String, a header in string format
+'			Example: arrangeHeader('We are testing this')
+'Output: 	String, same header but new-lines and spaces
+'			Example:  "We are\n
+'					   testing\n
+'					   this"
+'************************************************************
 Function arrangeHeader(header As String) As String
 
     Dim finalHeader, tmpWord As String
@@ -72,10 +88,16 @@ Function arrangeHeader(header As String) As String
 
 End Function
 
-'Input: String, cell address where range should start (e.g. "A1","X56, etc)
-'       String, cell address where range should end (e.g. "A1","X56, etc)
-'       String, string to be looked in range provided
-'Output: String, same header but new-lines and spaces
+
+'************************************************************
+'Purpose: 	Finds a cell containing a specific string and return its address.
+'Input: 	String, cell address where range should start.
+'       	String, cell address where range should end.
+'       	String, string to be looked in range provided.
+'			Example: findPropertyName( "A1", X56", "This is a header")
+'Output: 	String, address of the cell
+'			Example:  "B1"
+'************************************************************
 Function findPropertyName(startSearch As String, endSearch As String, targetCol As String) As String
     
     Dim targetAddress As String
@@ -102,6 +124,16 @@ Function findPropertyName(startSearch As String, endSearch As String, targetCol 
 
 End Function
 
+
+'************************************************************
+'Purpose: 	Locates the cell to be used at the moment of freezeing a panel. 
+'Input: 	String, cell address where range should start.
+'       	String, cell address where range should end.
+'       	String, string to be looked in range provided.
+'			Example: FreezePanelTarget( "A1", X56", "This is a header")
+'Output: 	String, address of the cell
+'			Example:  "C2"
+'************************************************************
 Function FreezePanelTarget(startSearch As String, endSearch As String, LimitColumn As String) As String
 
     'Declair var Address, offSet'
@@ -119,7 +151,14 @@ Function FreezePanelTarget(startSearch As String, endSearch As String, LimitColu
 
 End Function
 
-'Functions splits address, in string format, into a HashTable'
+
+'************************************************************
+'Purpose: 	Splits absolute reference address, in string format, into a HashTable
+'Input: 	String, ragne address to be split
+'			Example: splitAddress( "A:4")
+'Output: 	String, address of the cell
+'			Example:  {'Col':"A", "Row":4}
+'************************************************************
 Function splitAddress(address As String) As Object
     Dim ColRow As New Dictionary
     Dim key, val
@@ -137,6 +176,15 @@ Function splitAddress(address As String) As Object
 
 End Function
 
+
+'************************************************************
+'Purpose: 	Generates a Range address for the data headers.
+'Input: 	String, target or limit of the address
+'			String, type of address. Either a column or a row address
+'			Example: GenerateColRowTitleRange("4","Col")
+'Output: 	String, address of the range
+'			Example:  "$A:$4"
+'************************************************************
 Function GenerateColRowTitleRange(target As String, item As String) As String
     
     Dim itemRange As String
@@ -152,6 +200,14 @@ Function GenerateColRowTitleRange(target As String, item As String) As String
 
 End Function
 
+
+'************************************************************
+'Purpose: 	Find the last column with data in the sheet
+'Input: 	Worksheet, active worksheet
+'			Example: lastCl(active-worksheet)
+'Output: 	String, column letter
+'			Example:  "AA"
+'************************************************************
 Function lastCl(ws As Worksheet) As String
 
     ' Get Last Column Number with Data '
@@ -162,12 +218,28 @@ Function lastCl(ws As Worksheet) As String
 
 End Function
 
+
+'************************************************************
+'Purpose: 	Find the last row with data in the sheet
+'Input: 	Worksheet, active worksheet
+'			Example: lastRw(active-worksheet)
+'Output: 	String, row number
+'			Example:  "222"
+'************************************************************
 Function lastRw(ws As Worksheet) As Long
     ' Get last Row with data '
     lastRw = Cells(Rows.Count, 1).End(xlUp).Row
     
 End Function
 
+
+'************************************************************
+'Purpose: 	Finds the indexes of white spaces in a string
+'Input: 	String, text to be parsed
+'			Example: idxsWhiteSpaces('We are testing this')
+'Output: 	String, row number
+'			Example:  [2,6,13]
+'************************************************************
 'Function returns the idx location of a White Space in a String
 Function idxsWhiteSpaces(text As String) As Collection
     Dim idxs As New Collection

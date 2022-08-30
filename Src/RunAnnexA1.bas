@@ -1,4 +1,12 @@
 Attribute VB_Name = "RunAnnexA1"
+
+
+'************************************************************
+'Purpose: 	Main subrutine that runs the macro.
+'Input: 	Nothing
+'			Example: Main()
+'Output: 	Nothing
+'************************************************************
 Sub Main()
 
     'Config files location and extension definition
