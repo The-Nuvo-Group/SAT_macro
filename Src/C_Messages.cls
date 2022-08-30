@@ -58,7 +58,7 @@ End Function
 
 
 '************************************************************
-'Purpose:       Clears the queu holding the messages.
+'Purpose:       Clears the queue holding the messages.
 'Input:         Nothing
 '               Example: clear_messages()
 'Output:        Nothing
