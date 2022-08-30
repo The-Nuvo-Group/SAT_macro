@@ -493,9 +493,11 @@ End Sub
 
 
 '************************************************************
-'Purpose: 	Method that prints messages added to the message class. 
-'Input: 	Nothing
-'			Example: printLogs()
+'Purpose: 	Subrutine that traverses a HashTable recrusively 
+'			printing all of its key:value attributes.
+'Input: 	Dictionary, Hashtable to traverse
+'			Integer, level of deepness of the hashtable
+'			Example: printHashT({k:v}, 0)
 'Output: 	Nothing
 '************************************************************
 Public Function printLogs() As String

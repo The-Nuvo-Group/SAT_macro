@@ -178,12 +178,11 @@ End Function
 
 
 '************************************************************
-'Purpose: 	Generates a Range address for the data headers.
-'Input: 	String, target or limit of the address
-'			String, type of address. Either a column or a row address
-'			Example: GenerateColRowTitleRange("4","Col")
-'Output: 	String, address of the range
-'			Example:  "$A:$4"
+'Purpose: 	Splits absolute referecne address, in string format, into a HashTable
+'Input: 	String, ragne address to be split
+'			Example: GenerateColRowTitleRange( "A:4")
+'Output: 	String, address of the cell
+'			Example:  {'Col':"A", "Row":4}
 '************************************************************
 Function GenerateColRowTitleRange(target As String, item As String) As String
     

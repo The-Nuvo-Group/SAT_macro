@@ -29,7 +29,7 @@ End Sub
 
 '************************************************************
 'Purpose: 	Stores a new messages in the collection.
-'Input: 	String, text to be stored
+'Input: 	String, text
 '			Example: set_message("This is a new message")
 'Output: 	Nothing
 '************************************************************
