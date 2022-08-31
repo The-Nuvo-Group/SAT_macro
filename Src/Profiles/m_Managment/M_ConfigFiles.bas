@@ -1,6 +1,14 @@
 Attribute VB_Name = "M_ConfigFiles"
 'Option Explicit
 
+
+'************************************************************
+'Purpose:       Determins if configuration files are non-existent
+'Input:         String, system path to config files locations
+'               String, extension file to be look for
+'               Example:safeFail_configFiles("C:/SOME/PATH/IN/SYSTEM", ".json")
+'Output:        Nothing
+'************************************************************
 Function safeFail_configFiles(ByVal configFilesLocation As String, ByVal cfExtension As String)
     Dim warningMsg As String
     
@@ -26,6 +34,16 @@ Function safeFail_configFiles(ByVal configFilesLocation As String, ByVal cfExten
     
 End Function
 
+
+
+'************************************************************
+'Purpose:       Stores & Provides the location and name of config files.
+'Input:         String, system path to config files locations
+'               String, extension file to be look for
+'               Example: get_configFileNames("C:/SOME/PATH/IN/SYSTEM", ".json")
+'Output:        Collection, stores the full path of the files and the files name.
+'               [ ["C:/SOME/PATH/IN/SYSTEM"], ["Config_1.json"] ]
+'************************************************************
 Function get_configFileNames(ByVal path As String, ByVal extension As String) As Collection
 
     'Collection holds 2 string arrays
