@@ -13,10 +13,18 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
 'Global
 Private configFilesName As Collection
 Private arrangeHeadersFlag As Integer
 
+
+'************************************************************
+'Purpose:       Subrutine that opens the system location to the config files
+'Input:         Nothing
+'               Example: ConfigFilesButton_Click("C:/SOME/PATH/IN/SYSTEM", ".json")
+'Output:        Nothing
+'************************************************************
 Private Sub ConfigFilesButton_Click()
 
     Dim configFilesLocation As String
@@ -27,6 +35,13 @@ Private Sub ConfigFilesButton_Click()
 
 End Sub
 
+
+'************************************************************
+'Purpose:       Subrutine that "displays" a multiline string in a textfield
+'Input:         String, message to be display
+'               Example: set_programLogRunTB2("This is a message to be display")
+'Output:        Nothing
+'************************************************************
 Private Sub set_programLogRunTB2(msg As String)
     programLogRunTB2.WordWrap = False
     programLogRunTB2.MultiLine = True
@@ -35,6 +50,14 @@ Private Sub set_programLogRunTB2(msg As String)
     programLogRunTB2.Value = msg
 End Sub
 
+
+'************************************************************
+'Purpose:       Subrutine that initializes the GUI form for the
+'               user to interact with.
+'Input:         Nothing
+'               Example: UserForm_Initialize()
+'Output:        Nothing
+'************************************************************
 Private Sub UserForm_Initialize()
 
     Dim configFilesLocation, cfExtension As String
@@ -52,6 +75,14 @@ Private Sub UserForm_Initialize()
     
 End Sub
 
+
+'************************************************************
+'Purpose:       Subrutine that runs when the 'green' button has been clicked
+'               It triggers the creation of the Annex A/A-1.
+'Input:         Nothing
+'               Example: BtnRunAnnexAMacro_Click()
+'Output:        Nothing
+'************************************************************
 Private Sub BtnRunAnnexAMacro_Click()
 
     Dim Annex As New C_annexAone
