@@ -13,6 +13,13 @@ Attribute VB_Exposed = False
 'Global Collection
 Dim macroMsg As Collection
 
+
+'************************************************************
+'Purpose:       Constructor initializes a collection to store messages.
+'Input:         Nothing
+'               Example: Class_Initialize()
+'Output:        Nothing
+'************************************************************
 Private Sub Class_Initialize()
     'Set annexA = CreateObject("Scripting.Dictionary")
     Set macroMsg = New Collection
@@ -20,10 +27,26 @@ Private Sub Class_Initialize()
 End Sub
 
 
+'************************************************************
+'Purpose:       Stores a new messages in the collection.
+'Input:         String, text to be stored
+'               Example: set_message("This is a new message")
+'Output:        Nothing
+'************************************************************
 Public Function set_message(newMsg As String)
     macroMsg.Add newMsg
 End Function
 
+
+'************************************************************
+'Purpose:       Provides messages stored in the collection.
+'Input:         Nothing
+'               Example: get_messages()
+'Output:        String, containing all the messages stored by order of input.
+'               Example: "Message 1\n
+'                         Message 2\n
+'                         Message 3"
+'************************************************************
 Public Function get_messages() As String
     Dim msgString As String
     For Each msg In macroMsg
@@ -33,6 +56,13 @@ Public Function get_messages() As String
     
 End Function
 
+
+'************************************************************
+'Purpose:       Clears the queue holding the messages.
+'Input:         Nothing
+'               Example: clear_messages()
+'Output:        Nothing
+'************************************************************
 Public Function clear_messages()
     Set macroMsg = New Collection
 End Function
